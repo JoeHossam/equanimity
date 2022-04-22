@@ -1,4 +1,4 @@
-import Reac, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useGlobalContext, api_url } from '../context';
 
@@ -8,15 +8,15 @@ const Submenu = () => {
     const [data, setData] = useState([]);
     const [categories, setCategories] = useState([]);
     const [companies, setCompanies] = useState([]);
-    const [loading, isLoading] = useState(true);
 
     const [style, setStyle] = useState({
         top: submenuLocation.bottom,
         left: submenuLocation.center,
     });
+    const [anim, setAnime] = useState({});
+    const list = useRef(null);
 
     useEffect(() => {
-        isLoading(true);
         const fetchNavData = async () => {
             try {
                 const res = await fetch(`${api_url}category`);
@@ -26,7 +26,6 @@ const Submenu = () => {
                 const res2 = await fetch(`${api_url}company`);
                 const { companies: newCompanies } = await res2.json();
                 setCompanies(newCompanies);
-                isLoading(false);
             } catch (error) {
                 console.log(error);
             }
@@ -49,12 +48,20 @@ const Submenu = () => {
     }, [submenuData]);
 
     useEffect(() => {
-        if (isSubmenuOpen)
+        let timeoutId;
+        if (isSubmenuOpen) {
             setStyle({
                 top: submenuLocation.bottom,
                 left: submenuLocation.center,
-                height: 100 + data.length * 41,
+                height: 28 + 32 + 26 * (data.length + 1),
+                //      h4 + padding + items
             });
+            setAnime({ animation: 'opacity1 500ms ease' });
+            timeoutId = setTimeout(() => {
+                setAnime({ animation: '' });
+            }, 501);
+        }
+        return () => clearTimeout(timeoutId);
     }, [data, isSubmenuOpen]);
 
     return (
@@ -63,20 +70,28 @@ const Submenu = () => {
             style={style}
             onMouseLeave={closeSubmenu}
         >
-            {loading ? (
-                'Loading...'
-            ) : (
-                <>
+            {
+                <div style={anim} ref={list}>
                     <h4>{submenuData}</h4>
                     <div className={`submenu-center`}>
-                        {data.map((item, index) => {
-                            return <p key={index}>{item.name}</p>;
-                        })}
+                        {data === []
+                            ? 'Loading...'
+                            : data.map((item) => {
+                                  const page =
+                                      submenuData === 'Companies'
+                                          ? `company/${item._id}`
+                                          : `insurances/${item.name}`;
+                                  return (
+                                      <Link to={page} key={item._id}>
+                                          {item.name}
+                                      </Link>
+                                  );
+                              })}
                         <hr />
                         <Link to={`/${submenuData}`}>Browse All</Link>
                     </div>
-                </>
-            )}
+                </div>
+            }
         </aside>
     );
 };

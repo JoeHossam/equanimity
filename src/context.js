@@ -21,7 +21,7 @@ const AppProvider = ({ children }) => {
     const openSubmenu = (e) => {
         const tempBtn = e.target.getBoundingClientRect();
         const center = (tempBtn.left + tempBtn.right) / 2;
-        const bottom = tempBtn.bottom - 3;
+        const bottom = tempBtn.bottom - 3 + document.documentElement.scrollTop;
         setSubmenuLocation({ center, bottom });
         setSubmenuData(e.target.textContent);
         setIsSubmenuOpen(true);
