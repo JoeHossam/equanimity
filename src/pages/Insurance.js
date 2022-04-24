@@ -140,9 +140,17 @@ const Reviews = ({ reviewsData }) => {
                     margin: '1rem',
                 }}
             >
-                Leave a review
                 <br />
-                <TextField id="time" type="text" required />
+                <TextField
+                    multiline
+                    fullWidth
+                    size="small"
+                    minRows="3"
+                    maxRows="5"
+                    label="Leave a review"
+                    id="review"
+                    type="text"
+                />
                 <br />
                 <Rating
                     name="simple-controlled"
