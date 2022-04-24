@@ -18,28 +18,45 @@ import { useNavigate } from 'react-router-dom';
 
 function Copyright(props) {
     return (
-        <Typography
-            variant="body2"
-            color="text.secondary"
-            align="center"
-            {...props}
-        >
-            {'Copyright © '}
-            <Link color="inherit" href="http://localhost:3000/">
-                Equanimity
-            </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
+        <>
+            <Typography
+                variant="body2"
+                color="text.secondary"
+                align="center"
+                {...props}
+            >
+                {'Copyright © '}
+                <Link color="inherit" href="http://localhost:3000/about">
+                    Equanimity
+                </Link>{' '}
+                {new Date().getFullYear()}
+                {'.\n'}
+                <Link color="inherit" href="http://localhost:3000/">
+                    Back Home
+                </Link>
+            </Typography>
+            <Typography
+                variant="body2"
+                color="text.secondary"
+                align="center"
+                {...props}
+            ></Typography>
+        </>
     );
 }
 
 const theme = createTheme();
 
 export default function SignIn() {
-    const [isLogin, setIsLogin] = React.useState(true);
-    const [loginStyle, setLoginStyle] = React.useState({});
-    const [registerStyle, setRegisterStyle] = React.useState({});
+    const [loginStyle, setLoginStyle] = React.useState({
+        transform: `translateX(0%)`,
+        opacity: '1',
+    });
+    const [registerStyle, setRegisterStyle] = React.useState({
+        transform: `translateX(100%)`,
+        opacity: '0',
+    });
+    const [fixer, setfixer] = React.useState('');
     const [loginFail, setLoginFail] = React.useState(false);
     const [registerFail, setRegisterFail] = React.useState({});
     const [fetching, setFetching] = React.useState(false);
@@ -48,16 +65,31 @@ export default function SignIn() {
     const [name, setName] = React.useState('');
     const navigate = useNavigate();
 
+    React.useEffect(() => {
+        const timeout = setTimeout(() => {
+            setfixer('relative');
+        }, 1);
+        return () => clearTimeout(timeout);
+    }, []);
+
     const login = () => {
-        setRegisterStyle({ transform: `translateX(100%)`, opacity: '0' });
+        setRegisterStyle({
+            transform: `translateX(100%)`,
+            opacity: '0',
+        });
         setLoginStyle({ transform: `translateX(0%)`, opacity: '1' });
-        setIsLogin(true);
+        setLoginFail(false);
+        setRegisterFail({});
     };
 
     const sign = () => {
-        setLoginStyle({ transform: `translateX(-100%)`, opacity: '0' });
+        setLoginStyle({
+            transform: `translateX(-100%)`,
+            opacity: '0',
+        });
         setRegisterStyle({ transform: `translateX(0%)`, opacity: '1' });
-        setIsLogin(true);
+        setLoginFail(false);
+        setRegisterFail({});
     };
 
     const handleLogin = async (e) => {
@@ -129,13 +161,16 @@ export default function SignIn() {
             <Container
                 component="main"
                 maxWidth="xs"
-                sx={{ overflow: 'hidden' }}
+                sx={{ position: 'relative' }}
             >
                 <CssBaseline />
                 <div
                     style={{
-                        display: 'flex',
                         overflow: 'hidden',
+                        height: '80vh',
+                        minHeight: '300px',
+                        width: '444px',
+                        position: fixer,
                     }}
                 >
                     <div style={loginStyle} className="login-form">
