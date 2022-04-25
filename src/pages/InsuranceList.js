@@ -1,11 +1,26 @@
-import { Box, Pagination } from '@mui/material';
+import {
+    Alert,
+    Box,
+    Button,
+    CircularProgress,
+    Divider,
+    Grid,
+    Pagination,
+    Snackbar,
+} from '@mui/material';
 import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import CompareMenu from '../components/CompareMenu';
 import Filter from '../components/Filter';
 import SingleInsurance from '../components/SingleInsurance';
 import { api_url } from '../getData.js';
+import Slide from '@mui/material/Slide';
 
 const searchContext = React.createContext();
+
+function SlideTransition(props) {
+    return <Slide {...props} direction="up" />;
+}
 
 const InsuranceList = () => {
     const [loading, setLoading] = useState(true);
@@ -16,6 +31,10 @@ const InsuranceList = () => {
     const [data, setData] = useState([]);
     const [companies, setCompanies] = useState([]);
     const [categories, setCategories] = useState([]);
+    const [comparing1, setComparing1] = useState({});
+    const [comparing2, setComparing2] = useState({});
+    const [showError, setShowError] = useState({});
+    const [openCompare, setOpenCompare] = useState(false);
     const { category: urlCategory } = useParams();
 
     //filtering
@@ -53,6 +72,12 @@ const InsuranceList = () => {
         };
         fetchData();
     }, [query]);
+
+    useEffect(() => {
+        if (showError === true) {
+        }
+    }, [showError]);
+
     return (
         <>
             {loading ? (
@@ -61,46 +86,121 @@ const InsuranceList = () => {
                 <searchContext.Provider
                     value={{ page, setQuery, companies, categories }}
                 >
-                    <Box>
+                    <Box className={'insurance-list-main'}>
                         <Filter
                             urlCategory={categories.find(
                                 (item) => item.name === urlCategory
                             )}
                         />
+
                         {insuranceLoading ? (
-                            'loading..'
+                            <Box sx={{ display: 'flex' }}>
+                                <CircularProgress />
+                            </Box>
                         ) : data.length === 0 ? (
                             'No result matches'
                         ) : (
-                            <div>
-                                <div
-                                    className="insurance-list"
-                                    style={{ width: '100%' }}
-                                >
-                                    {data.map((item) => {
-                                        const company = companies.find(
-                                            (comp) =>
-                                                comp._id === item.createdBy
-                                        );
-                                        return (
-                                            <SingleInsurance
-                                                key={item._id}
-                                                {...item}
-                                                company={company}
-                                            />
-                                        );
-                                    })}
-                                </div>
+                            <div
+                                style={{
+                                    minHeight: 'calc(100vh - 5.5rem)',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    overflow: 'auto',
+                                }}
+                            >
+                                <Box sx={{ flexGrow: 1 }}>
+                                    <Grid
+                                        container
+                                        spacing={{ xs: 2, md: 3 }}
+                                        columns={{ xs: 4, sm: 8, md: 12 }}
+                                        sx={{
+                                            width: '100%',
+                                            margin: 'auto',
+                                            padding: '1rem',
+                                        }}
+                                    >
+                                        {data.map((item) => {
+                                            const company = companies.find(
+                                                (comp) =>
+                                                    comp._id === item.createdBy
+                                            );
+                                            return (
+                                                <Grid
+                                                    item
+                                                    xs={2}
+                                                    sm={4}
+                                                    md={4}
+                                                    key={item._id}
+                                                >
+                                                    <SingleInsurance
+                                                        key={item._id}
+                                                        insurance={{ ...item }}
+                                                        comparing1={comparing1}
+                                                        comparing2={comparing2}
+                                                        setComparing2={
+                                                            setComparing2
+                                                        }
+                                                        setComparing1={
+                                                            setComparing1
+                                                        }
+                                                        setShowError={
+                                                            setShowError
+                                                        }
+                                                        company={company}
+                                                    />
+                                                </Grid>
+                                            );
+                                        })}
+                                    </Grid>
+                                </Box>
+                                <Divider />
                                 <Pagination
                                     count={totalPages}
                                     page={page}
                                     variant="outlined"
                                     shape="rounded"
                                     onChange={(e) => setPage(e.target.value)}
+                                    sx={{
+                                        '& .MuiPagination-ul': {
+                                            justifyContent: 'center',
+                                        },
+                                        marginTop: '1rem',
+                                    }}
                                 />
                             </div>
                         )}
                     </Box>
+                    <Button onClick={() => setOpenCompare(true)}>
+                        Open Compare
+                    </Button>
+                    <CompareMenu
+                        openCompare={openCompare}
+                        setOpenCompare={setOpenCompare}
+                        comparing1={comparing1}
+                        comparing2={comparing2}
+                        setComparing1={setComparing1}
+                        setComparing2={setComparing2}
+                        companies={companies}
+                        setShowError={setShowError}
+                    />
+                    <Snackbar
+                        open={showError.isError}
+                        onClose={() =>
+                            setShowError({ ...showError, isError: false })
+                        }
+                        TransitionComponent={SlideTransition}
+                        autoHideDuration={2000}
+                    >
+                        <Alert
+                            onClose={() =>
+                                setShowError({ ...showError, isError: false })
+                            }
+                            severity={showError.type}
+                            sx={{ width: '100%' }}
+                        >
+                            {showError.msg}
+                        </Alert>
+                    </Snackbar>
                 </searchContext.Provider>
             )}
         </>

@@ -74,8 +74,8 @@ const Filter = ({ urlCategory }) => {
         <Box
             sx={{
                 maxWidth: '500px',
+                minWidth: '285px',
                 padding: '1rem',
-                margin: 'auto',
                 textAlign: 'center',
             }}
         >
@@ -276,7 +276,8 @@ const Filter = ({ urlCategory }) => {
             <Box
                 sx={{
                     display: 'flex',
-                    justifyContent: 'center',
+                    justifyContent: 'space-evenly',
+                    alignItems: 'center',
                     marginTop: '0.5rem',
                 }}
             >
@@ -308,7 +309,12 @@ const Filter = ({ urlCategory }) => {
                         <MenuItem value={'-createdAt'}>Oldest</MenuItem>
                     </Select>
                 </FormControl>
-                <Button variant="contained" size="medium" onClick={applyQuery}>
+                <Button
+                    variant="contained"
+                    size="medium"
+                    sx={{ fontSize: '0.75rem' }}
+                    onClick={applyQuery}
+                >
                     Apply Filters
                 </Button>
             </Box>

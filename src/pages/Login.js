@@ -12,7 +12,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { api_url } from '../context';
+import { api_url, useGlobalContext } from '../context';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
@@ -63,6 +63,7 @@ export default function SignIn() {
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [name, setName] = React.useState('');
+    const { user, setUser } = useGlobalContext();
     const navigate = useNavigate();
 
     React.useEffect(() => {
@@ -97,7 +98,7 @@ export default function SignIn() {
         setLoginFail(false);
         setFetching(true);
         try {
-            await axios.post(
+            const res = await axios.post(
                 `${api_url}auth/login`,
                 {
                     email: email,
@@ -126,7 +127,7 @@ export default function SignIn() {
                 },
                 { withCredentials: true, 'Content-Type': 'application/json' }
             );
-            await axios.post(
+            const res = await axios.post(
                 `${api_url}auth/login`,
                 {
                     email: email,
