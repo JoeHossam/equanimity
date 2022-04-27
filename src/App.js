@@ -13,6 +13,13 @@ import InsuranceList from './pages/InsuranceList';
 import Company from './pages/Company';
 import CompanyList from './pages/CompanyList';
 import Error from './pages/Error';
+import Join from './pages/Join';
+import UserProfile from './pages/UserProfile';
+import ProfileReviews from './pages/ProfileReviews';
+import ProfileSettings from './components/ProfileSettings';
+import FavouritesList from './pages/FavouritesList';
+import CompanyDashboard from './pages/company/CompanyDashboard';
+import CompanyLogin from './pages/company/CompanyLogin';
 
 const NavLayout = () => {
     return (
@@ -23,13 +30,46 @@ const NavLayout = () => {
     );
 };
 
+const ProfileLayout = () => {
+    return (
+        <>
+            <UserProfile />
+            <Outlet />
+        </>
+    );
+};
+
+const CompanyNavLayout = () => {
+    return (
+        <>
+            <Outlet />
+        </>
+    );
+};
+
 function App() {
     return (
         <Router>
             <Routes>
-                <Route path="/" element={<NavLayout />}>
+                <Route exact path="/" element={<NavLayout />}>
                     <Route index element={<Home />} />
                     <Route path="/about" element={<About />} />
+
+                    <Route path="/profile" element={<ProfileLayout />}>
+                        <Route
+                            path="/profile/settings"
+                            element={<ProfileSettings />}
+                        />
+                        <Route
+                            path="/profile/Favourites"
+                            element={<FavouritesList />}
+                        />
+                        <Route
+                            path="/profile/Reviews"
+                            element={<ProfileReviews />}
+                        />
+                    </Route>
+
                     <Route path="/insurances" element={<InsuranceList />} />
                     <Route
                         path="/insurances/:category"
@@ -40,7 +80,14 @@ function App() {
                     <Route path="/insurance/:id" element={<Insurance />} />
                     <Route path="*" element={<Error />} />
                 </Route>
-                <Route path="/join" element={<Login />} />
+                <Route path="/join" element={<Join />} />
+                <Route path="/companyadmin" element={<CompanyNavLayout />}>
+                    <Route index element={<CompanyDashboard />} />
+                    <Route
+                        path="/companyadmin/login"
+                        element={<CompanyLogin />}
+                    />
+                </Route>
             </Routes>
         </Router>
     );

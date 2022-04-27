@@ -1,3 +1,4 @@
+import { Divider } from '@mui/material';
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useGlobalContext, api_url } from '../context';
@@ -53,7 +54,7 @@ const Submenu = () => {
             setStyle({
                 top: submenuLocation.bottom,
                 left: submenuLocation.center,
-                height: 28 + 32 + 26 * (data.length + 1),
+                height: 34 + 32 + 44 * Math.ceil(data.length / 2) + 44,
                 //      h4 + padding + items
             });
             setAnime({ animation: 'opacity1 500ms ease' });
@@ -72,23 +73,27 @@ const Submenu = () => {
         >
             {
                 <div style={anim} ref={list}>
-                    <h4>{submenuData}</h4>
+                    <h4 className="submenu-center-top">{submenuData}</h4>
                     <div className={`submenu-center`}>
-                        {data === []
-                            ? 'Loading...'
-                            : data.map((item) => {
-                                  const page =
-                                      submenuData === 'Companies'
-                                          ? `company/${item._id}`
-                                          : `insurances/${item.name}`;
-                                  return (
-                                      <Link to={page} key={item._id}>
-                                          {item.name}
-                                      </Link>
-                                  );
-                              })}
-                        <hr />
-                        <Link to={`/${submenuData}`}>Browse All</Link>
+                        <div className="submenu-center-mid">
+                            {data === []
+                                ? 'Loading...'
+                                : data.map((item) => {
+                                      const page =
+                                          submenuData === 'Companies'
+                                              ? `company/${item._id}`
+                                              : `insurances/${item.name}`;
+                                      return (
+                                          <Link to={page} key={item._id}>
+                                              {item.name}
+                                          </Link>
+                                      );
+                                  })}
+                        </div>
+                        <Divider />
+                        <div className="submenu-center-bot">
+                            <Link to={`/${submenuData}`}>Browse All</Link>
+                        </div>
                     </div>
                 </div>
             }

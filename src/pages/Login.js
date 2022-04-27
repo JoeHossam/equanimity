@@ -98,7 +98,7 @@ export default function SignIn() {
         setLoginFail(false);
         setFetching(true);
         try {
-            const res = await axios.post(
+            await axios.post(
                 `${api_url}auth/login`,
                 {
                     email: email,
@@ -158,26 +158,36 @@ export default function SignIn() {
     };
 
     return (
-        <ThemeProvider theme={theme}>
-            <Container
-                component="main"
-                maxWidth="xs"
-                sx={{ position: 'relative' }}
+        <Container
+            component="main"
+            maxWidth="xl"
+            sx={{
+                background: '#ccc',
+                height: '100vh',
+                display: 'flex',
+                alignItems: 'center',
+            }}
+        >
+            <CssBaseline />
+            <div
+                className="kbeera"
+                style={{ overflow: 'hidden', margin: 'auto' }}
             >
-                <CssBaseline />
                 <div
                     style={{
-                        overflow: 'hidden',
                         height: '80vh',
                         minHeight: '300px',
-                        width: '444px',
                         position: fixer,
+                        margin: '2rem',
+                        width: '444px',
+                        // background: 'white',
+                        borderRadius: '0.25rem',
                     }}
                 >
                     <div style={loginStyle} className="login-form">
                         <Box
                             sx={{
-                                marginTop: 8,
+                                marginTop: 5,
                                 display: 'flex',
                                 flexDirection: 'column',
                                 alignItems: 'center',
@@ -261,13 +271,24 @@ export default function SignIn() {
                                         </Link>
                                     </Grid>
                                 </Grid>
+                                <div
+                                    style={{
+                                        bottom: 0,
+                                        position: 'absolute',
+                                        display: 'flex',
+                                        justifyContent: 'center',
+                                        width: '100%',
+                                    }}
+                                >
+                                    <Copyright sx={{ mb: 2 }} />
+                                </div>
                             </Box>
                         </Box>
                     </div>
                     <div style={registerStyle} className="register-form">
                         <Box
                             sx={{
-                                marginTop: 8,
+                                marginTop: 2,
                                 display: 'flex',
                                 flexDirection: 'column',
                                 alignItems: 'center',
@@ -285,15 +306,6 @@ export default function SignIn() {
                                 noValidate
                                 sx={{ mt: 1 }}
                             >
-                                <div
-                                    className="fb-login-button"
-                                    data-width=""
-                                    data-size="large"
-                                    data-button-type="continue_with"
-                                    data-layout="default"
-                                    data-auto-logout-link="false"
-                                    data-use-continue-as="true"
-                                ></div>
                                 <TextField
                                     sx={{ marginY: '0.25rem' }}
                                     required
@@ -353,13 +365,22 @@ export default function SignIn() {
                                         </Link>
                                     </Grid>
                                 </Grid>
+                                <div
+                                    style={{
+                                        bottom: 0,
+                                        position: 'absolute',
+                                        display: 'flex',
+                                        justifyContent: 'center',
+                                        width: '100%',
+                                    }}
+                                >
+                                    <Copyright sx={{ mb: 2 }} />
+                                </div>
                             </Box>
                         </Box>
                     </div>
                 </div>
-
-                <Copyright sx={{ mt: 8, mb: 4 }} />
-            </Container>
-        </ThemeProvider>
+            </div>
+        </Container>
     );
 }

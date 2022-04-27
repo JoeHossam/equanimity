@@ -2,26 +2,26 @@ import React from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
 import {
     Avatar,
-    Grid,
     Divider,
     Box,
     Tooltip,
     IconButton,
     Menu,
     MenuItem,
-    Typography,
     ListItemIcon,
     Button,
 } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { api_url, useGlobalContext } from '../context';
 import Submenu from './Submenu';
 import { Logout } from '@mui/icons-material';
+import StarRateIcon from '@mui/icons-material/StarRate';
 import axios from 'axios';
 
 const Navbar = () => {
+    const navigate = useNavigate();
     const { openSubmenu, closeSubmenu, openSidebar, user, isLoggedIn } =
         useGlobalContext();
     const handleSubmenu = (e) => {
@@ -40,8 +40,9 @@ const Navbar = () => {
     };
 
     const logout = async () => {
-        const res = await axios.get(`${api_url}auth/logout`);
-        console.log('logout', res);
+        const res = await axios.get(`${api_url}auth/logout`, {
+            withCredentials: 'true',
+        });
     };
     return (
         <>
@@ -77,21 +78,29 @@ const Navbar = () => {
                         </li>
                         <li>
                             <button className="link-btn">
-                                <Link to={'/about'}>Aboutus</Link>
+                                <Link
+                                    style={{
+                                        color: 'white',
+                                        fontSize: '1.1rem',
+                                    }}
+                                    to={'/about'}
+                                >
+                                    Aboutus
+                                </Link>
                             </button>
                         </li>
                     </ul>
 
-                    <Box sx={{ flexGrow: 0 }} className="signin-btn">
-                        <Tooltip title="Open settings">
-                            <IconButton
-                                onClick={handleOpenUserMenu}
-                                sx={{ p: 0 }}
-                            >
-                                <Avatar alt={user.name} />
-                            </IconButton>
-                        </Tooltip>
-                        {isLoggedIn ? (
+                    {isLoggedIn ? (
+                        <Box sx={{ flexGrow: 0 }} className="signin-btn">
+                            <Tooltip title="Open settings">
+                                <IconButton
+                                    onClick={handleOpenUserMenu}
+                                    sx={{ p: 0 }}
+                                >
+                                    <Avatar alt={user.name} />
+                                </IconButton>
+                            </Tooltip>
                             <Menu
                                 sx={{ mt: '45px' }}
                                 id="menu-appbar"
@@ -108,17 +117,33 @@ const Navbar = () => {
                                 open={Boolean(anchorElUser)}
                                 onClose={handleCloseUserMenu}
                             >
-                                <MenuItem>
+                                <MenuItem
+                                    onClick={() =>
+                                        navigate('/profile/settings')
+                                    }
+                                >
                                     <ListItemIcon>
                                         <PersonIcon fontSize="small" />
                                     </ListItemIcon>
                                     Profile
                                 </MenuItem>
-                                <MenuItem>
+                                <MenuItem
+                                    onClick={() =>
+                                        navigate('/profile/favourites')
+                                    }
+                                >
                                     <ListItemIcon>
                                         <FavoriteIcon fontSize="small" />
                                     </ListItemIcon>
                                     Favorites
+                                </MenuItem>
+                                <MenuItem
+                                    onClick={() => navigate('/profile/reviews')}
+                                >
+                                    <ListItemIcon>
+                                        <StarRateIcon fontSize="small" />
+                                    </ListItemIcon>
+                                    Reviews
                                 </MenuItem>
                                 <Divider />
                                 <MenuItem onClick={logout}>
@@ -128,10 +153,12 @@ const Navbar = () => {
                                     Logout
                                 </MenuItem>
                             </Menu>
-                        ) : (
-                            <Button>Sign in</Button>
-                        )}
-                    </Box>
+                        </Box>
+                    ) : (
+                        <Link to="/join">
+                            <Button sx={{ color: 'white' }}>join</Button>
+                        </Link>
+                    )}
                 </div>
             </nav>
             <Submenu />

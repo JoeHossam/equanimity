@@ -1,0 +1,356 @@
+import {
+    Alert,
+    Button,
+    CardHeader,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+    Divider,
+    Rating,
+    Snackbar,
+    TextField,
+    Typography,
+} from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { api_url, useGlobalContext } from '../context';
+import axios from 'axios';
+import { Link } from 'react-router-dom';
+import EditIcon from '@mui/icons-material/Edit';
+import ClearIcon from '@mui/icons-material/Clear';
+
+const ProfileReviews = () => {
+    const [reviews, setReviews] = useState([]);
+    const [insurances, setInsurances] = useState([]);
+    const [reviewLoading, setReviewLoading] = useState(true);
+    const [loading, setLoading] = useState(true);
+    const { user, userLoading } = useGlobalContext();
+    useEffect(() => {
+        if (userLoading) return;
+        setReviewLoading(true);
+        const fetchData = async () => {
+            try {
+                const res = await axios.get(
+                    `${api_url}review/user/${user._id}`,
+                    { withCredentials: true }
+                );
+                setReviews(res.data.reviews);
+                setReviewLoading(false);
+            } catch (error) {
+                console.log(error.message);
+            }
+        };
+        fetchData();
+    }, [userLoading]);
+
+    useEffect(() => {
+        if (reviewLoading) return;
+        if (reviews.length === 0) {
+            setLoading(false);
+            return;
+        }
+        const getInsurances = async () => {
+            let list = [];
+            for (let index = 0; index < reviews.length; index++) {
+                const insData = await axios.get(
+                    `${api_url}insurance/${reviews[index].insuranceId}`
+                );
+                const { title, _id } = insData.data.insurance;
+                list.push({ title, _id });
+            }
+
+            setInsurances(list);
+            setLoading(false);
+        };
+        getInsurances();
+    }, [reviews]);
+
+    if (loading || userLoading) {
+        return 'Loading...';
+    }
+
+    if (reviews.length === 0) {
+        return <h2>You haven't made any reviews.</h2>;
+    }
+
+    return (
+        <Reviews
+            reviews={reviews}
+            setReviews={setReviews}
+            insurances={insurances}
+        />
+    );
+};
+
+const Reviews = ({ reviews, setReviews, insurances }) => {
+    const [open, setOpen] = useState(false);
+    const [snack, setSnack] = useState({
+        open: false,
+        msg: '',
+        type: 'success',
+    });
+    const [reviewId, setReviewId] = useState({});
+    const [editComment, setEditComment] = useState('');
+    const [editRating, setEditRating] = useState(0);
+    const [isDelete, setIsDelete] = useState(false);
+
+    const openEdit = (review) => {
+        setReviewId(review._id);
+        setEditComment(review.comment);
+        setEditRating(review.rating);
+        setIsDelete(false);
+        setOpen(true);
+    };
+
+    const updateReview = async () => {
+        try {
+            const res = await axios.patch(
+                `${api_url}review/${reviewId}`,
+                {
+                    rating: editRating,
+                    comment: editComment,
+                },
+                { withCredentials: 'true' }
+            );
+            const { updatedReview } = res.data;
+            setReviews(
+                reviews.map((item) => {
+                    if (item._id !== updatedReview._id) return item;
+                    return updatedReview;
+                })
+            );
+            setOpen(false);
+            setSnack({
+                open: true,
+                msg: 'Updated Successfully',
+                type: 'success',
+            });
+        } catch (error) {
+            setSnack({ open: true, msg: error.message, type: 'error' });
+        }
+    };
+
+    const openDelete = (id) => {
+        setReviewId(id);
+        setIsDelete(true);
+        setOpen(true);
+    };
+
+    const deleteReview = async () => {
+        try {
+            await axios.delete(`${api_url}review/${reviewId}`, {
+                withCredentials: true,
+            });
+            setReviews(
+                reviews.filter((item) => {
+                    if (item._id !== reviewId) return item;
+                })
+            );
+            setOpen(false);
+            setIsDelete(false);
+            setSnack({
+                open: true,
+                msg: 'Deleted Successfully',
+                type: 'success',
+            });
+        } catch (error) {
+            setSnack({ open: true, msg: error.message, type: 'error' });
+        }
+    };
+
+    if (reviews.length === 0) {
+        return <h2>You haven't made any reviews.</h2>;
+    }
+    return (
+        <div>
+            <Typography variant="h2" sx={{ marginBottom: '3rem' }}>
+                my reviews
+            </Typography>
+            <ul
+                style={{
+                    borderBlockEnd: '1',
+                    margin: 'auto',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    width: '100vw',
+                }}
+            >
+                {reviews.map((item) => {
+                    return (
+                        <>
+                            <li
+                                key={item._id}
+                                style={{
+                                    backgroundColor: 'white',
+                                    borderRadius: '0.25rem',
+                                    width: '60%',
+                                    marginBottom: '2rem',
+                                }}
+                            >
+                                <CardHeader
+                                    sx={{
+                                        alignItems: 'flex-start',
+                                    }}
+                                    title={
+                                        <>
+                                            <Typography
+                                                variant="h6"
+                                                sx={{
+                                                    display: 'flex',
+                                                    justifyContent:
+                                                        'space-between',
+                                                }}
+                                            >
+                                                <Link
+                                                    to={`/insurance/${item.insuranceId}`}
+                                                >
+                                                    {
+                                                        insurances.find(
+                                                            (ins) =>
+                                                                ins._id ===
+                                                                item.insuranceId
+                                                        ).title
+                                                    }
+                                                </Link>
+                                                <div>
+                                                    <Button
+                                                        size="small"
+                                                        sx={{
+                                                            marginRight: '10px',
+                                                        }}
+                                                        variant="contained"
+                                                        onClick={() =>
+                                                            openEdit(item)
+                                                        }
+                                                    >
+                                                        <EditIcon />
+                                                    </Button>
+
+                                                    <Button
+                                                        size="small"
+                                                        color="error"
+                                                        variant="contained"
+                                                        onClick={() =>
+                                                            openDelete(item._id)
+                                                        }
+                                                    >
+                                                        <ClearIcon />
+                                                    </Button>
+                                                </div>
+                                            </Typography>
+
+                                            <Rating
+                                                name="read-only"
+                                                value={item.rating}
+                                                precision={0.5}
+                                                readOnly
+                                            />
+                                            {item.comment && (
+                                                <>
+                                                    <Divider />
+                                                    <p
+                                                        style={{
+                                                            margin: '18px 0',
+                                                        }}
+                                                    >
+                                                        {item.comment}
+                                                    </p>
+                                                </>
+                                            )}
+                                        </>
+                                    }
+                                />
+                                <Divider />
+                            </li>
+                        </>
+                    );
+                })}
+            </ul>
+            <Dialog open={open} onClose={() => setOpen(false)}>
+                {isDelete ? (
+                    <>
+                        <DialogTitle>Delete Review</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText>
+                                Are you sure you want to delete this insurance
+                            </DialogContentText>
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    justifyContent: 'space-around',
+                                }}
+                            >
+                                <Button color="error" onClick={deleteReview}>
+                                    Delete
+                                </Button>
+                                <Button
+                                    onClick={() => {
+                                        setOpen(false);
+                                    }}
+                                >
+                                    Cancel
+                                </Button>
+                            </div>
+                        </DialogContent>
+                    </>
+                ) : (
+                    <>
+                        <DialogTitle>Edit Review</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText>
+                                <Rating
+                                    value={editRating}
+                                    precision={0.5}
+                                    onChange={(event, newValue) => {
+                                        setEditRating(newValue);
+                                    }}
+                                />
+                            </DialogContentText>
+                            <TextField
+                                autoFocus
+                                margin="dense"
+                                id="name"
+                                label="Review"
+                                sx={{ minWidth: '400px' }}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                                value={editComment}
+                                onChange={(event) => {
+                                    setEditComment(event.target.value);
+                                }}
+                                fullWidth
+                                variant="standard"
+                            />
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={() => setOpen(false)}>
+                                Cancel
+                            </Button>
+                            <Button onClick={() => updateReview()}>
+                                Update
+                            </Button>
+                        </DialogActions>
+                    </>
+                )}
+            </Dialog>
+            <Snackbar
+                open={snack.open}
+                autoHideDuration={6000}
+                onClose={() => setSnack({ ...snack, open: false })}
+            >
+                <Alert
+                    onClose={() => setSnack({ ...snack, open: false })}
+                    severity={snack.type}
+                    sx={{ width: '100%' }}
+                >
+                    {snack.msg}
+                </Alert>
+            </Snackbar>
+        </div>
+    );
+};
+
+export default ProfileReviews;

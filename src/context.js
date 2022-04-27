@@ -11,9 +11,11 @@ const AppProvider = ({ children }) => {
     const [submenuData, setSubmenuData] = useState();
     const [user, setUser] = useState({});
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [userLoading, setUserLoading] = useState(true);
 
     useEffect(() => {
         const checkLoggedIn = async () => {
+            setUserLoading(true);
             try {
                 const res = await axios.get(`${api_url}islogged`, {
                     withCredentials: true,
@@ -21,9 +23,13 @@ const AppProvider = ({ children }) => {
                 if (res.data.islogged) {
                     setIsLoggedIn(true);
                     setUser(res.data.user);
-                    console.log(res);
+                    setUserLoading(false);
+                } else {
+                    setIsLoggedIn(false);
+                    setUser({});
                 }
             } catch (error) {
+                setUserLoading(false);
                 setIsLoggedIn(false);
             }
         };
@@ -57,7 +63,9 @@ const AppProvider = ({ children }) => {
                 submenuLocation,
                 submenuData,
                 user,
+                userLoading,
                 isLoggedIn,
+                setUser,
                 closeSidebar,
                 closeSubmenu,
                 openSidebar,
