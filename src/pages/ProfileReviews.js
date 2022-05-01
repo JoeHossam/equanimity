@@ -1,6 +1,7 @@
 import {
     Alert,
     Button,
+    ButtonGroup,
     CardHeader,
     Dialog,
     DialogActions,
@@ -214,12 +215,9 @@ const Reviews = ({ reviews, setReviews, insurances }) => {
                                                         ).title
                                                     }
                                                 </Link>
-                                                <div>
+                                                <ButtonGroup>
                                                     <Button
                                                         size="small"
-                                                        sx={{
-                                                            marginRight: '10px',
-                                                        }}
                                                         variant="contained"
                                                         onClick={() =>
                                                             openEdit(item)
@@ -238,7 +236,7 @@ const Reviews = ({ reviews, setReviews, insurances }) => {
                                                     >
                                                         <ClearIcon />
                                                     </Button>
-                                                </div>
+                                                </ButtonGroup>
                                             </Typography>
 
                                             <Rating
@@ -268,7 +266,12 @@ const Reviews = ({ reviews, setReviews, insurances }) => {
                     );
                 })}
             </ul>
-            <Dialog open={open} onClose={() => setOpen(false)}>
+            <Dialog
+                open={open}
+                maxWidth="md"
+                fullWidth={!isDelete}
+                onClose={() => setOpen(false)}
+            >
                 {isDelete ? (
                     <>
                         <DialogTitle>Delete Review</DialogTitle>

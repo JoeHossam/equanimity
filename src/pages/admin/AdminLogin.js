@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { api_url, useGlobalContext } from '../../context';
 
 const CompanyLogin = () => {
-    const { setIsCompanyLogged } = useGlobalContext();
+    const { setIsAdminLogged } = useGlobalContext();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
@@ -12,15 +12,15 @@ const CompanyLogin = () => {
         e.preventDefault();
         try {
             await axios.post(
-                `${api_url}auth/company_login`,
+                `${api_url}auth/admin_login`,
                 {
                     username: username,
                     password: password,
                 },
                 { withCredentials: true, 'Content-Type': 'application/json' }
             );
-            setIsCompanyLogged(true);
-            navigate('/companyadmin');
+            setIsAdminLogged(true);
+            navigate('/admin/insurances');
         } catch (error) {
             console.log(error.message);
         }
@@ -53,7 +53,7 @@ const CompanyLogin = () => {
                     onSubmit={login}
                     style={{ justifyContent: 'space-between' }}
                 >
-                    <h3>Company Login</h3>
+                    <h3>Admin Login</h3>
                     <div
                         style={{
                             width: '100%',

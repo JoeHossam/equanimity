@@ -20,7 +20,7 @@ const InsuranceSkeleton = () => {
 };
 
 const SingleInsurance = (props) => {
-    const { _id, title, createdBy, category, price, description } =
+    const { _id, title, createdBy, category, basePrice, description } =
         props.insurance;
     const {
         comparing1,
@@ -89,7 +89,7 @@ const SingleInsurance = (props) => {
                             variant="subtitle2"
                             sx={{ marginTop: '0.5rem' }}
                         >
-                            {price} EGP
+                            {basePrice} EGP
                         </Typography>
                         <Typography variant="subtitle1">
                             <Link to={`/company/${createdBy}`}>

@@ -1,0 +1,9 @@
+:root {
+    --primary-color: #080710;
+    --secondary-color: #28272f;
+}
+
+body {
+    background-color: #080710;
+    color: #ccc;
+}

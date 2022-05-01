@@ -22,8 +22,14 @@ import axios from 'axios';
 
 const Navbar = () => {
     const navigate = useNavigate();
-    const { openSubmenu, closeSubmenu, openSidebar, user, isLoggedIn } =
-        useGlobalContext();
+    const {
+        openSubmenu,
+        closeSubmenu,
+        openSidebar,
+        user,
+        isLoggedIn,
+        setIsLoggedIn,
+    } = useGlobalContext();
     const handleSubmenu = (e) => {
         if (!e.target.classList.contains('link-btn')) {
             closeSubmenu();
@@ -40,9 +46,15 @@ const Navbar = () => {
     };
 
     const logout = async () => {
-        const res = await axios.get(`${api_url}auth/logout`, {
-            withCredentials: 'true',
-        });
+        try {
+            const res = await axios.get(`${api_url}auth/logout`, {
+                withCredentials: 'true',
+            });
+            setIsLoggedIn(false);
+            navigate('/');
+        } catch (error) {
+            console.log(error.message);
+        }
     };
     return (
         <>

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState, useContext } from 'react';
+import Loading from './pages/Loading';
 
 const AppContext = React.createContext();
 const api_url = 'http://localhost:3001/';
@@ -9,8 +10,17 @@ const AppProvider = ({ children }) => {
     const [isSubmenuOpen, setIsSubmenuOpen] = useState(false);
     const [submenuLocation, setSubmenuLocation] = useState({});
     const [submenuData, setSubmenuData] = useState();
-    const [user, setUser] = useState({});
+
+    //authentication
+    //user
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [user, setUser] = useState({});
+    //company
+    const [isCompanyLogged, setIsCompanyLogged] = useState(false);
+    const [companyUser, setCompanyUser] = useState({});
+    //admin
+    const [isAdminLogged, setIsAdminLogged] = useState(false);
+    //loading
     const [userLoading, setUserLoading] = useState(true);
 
     useEffect(() => {
@@ -20,22 +30,42 @@ const AppProvider = ({ children }) => {
                 const res = await axios.get(`${api_url}islogged`, {
                     withCredentials: true,
                 });
+                const api_user = res.data.user;
                 if (res.data.islogged) {
-                    setIsLoggedIn(true);
-                    setUser(res.data.user);
+                    if (api_user.company_id) {
+                        setIsCompanyLogged(true);
+                        const res2 = await axios.get(
+                            `${api_url}company/${api_user.company_id}`
+                        );
+                        setCompanyUser(res2.data.company);
+                    } else if (api_user.provider === 'admin') {
+                        setIsAdminLogged(true);
+                    } else {
+                        setIsLoggedIn(true);
+                        setUser(res.data.user);
+                    }
                     setUserLoading(false);
                 } else {
                     setIsLoggedIn(false);
+                    setIsCompanyLogged(false);
+                    setIsAdminLogged(false);
                     setUser({});
+                    setCompanyUser({});
+
+                    setUserLoading(false);
                 }
             } catch (error) {
-                setUserLoading(false);
                 setIsLoggedIn(false);
+                setIsCompanyLogged(false);
+                setIsAdminLogged(false);
+                setUser({});
+                setCompanyUser({});
+                setUserLoading(false);
             }
         };
 
         checkLoggedIn();
-    }, []);
+    }, [isLoggedIn, isCompanyLogged, isAdminLogged]);
 
     const closeSidebar = () => {
         setIsSidebarOpen(false);
@@ -55,6 +85,10 @@ const AppProvider = ({ children }) => {
         setIsSubmenuOpen(true);
     };
 
+    if (userLoading) {
+        return <Loading />;
+    }
+
     return (
         <AppContext.Provider
             value={{
@@ -62,10 +96,17 @@ const AppProvider = ({ children }) => {
                 isSubmenuOpen,
                 submenuLocation,
                 submenuData,
-                user,
                 userLoading,
+                user,
                 isLoggedIn,
+                companyUser,
+                isCompanyLogged,
+                isAdminLogged,
+                setIsAdminLogged,
+                setCompanyUser,
+                setIsCompanyLogged,
                 setUser,
+                setIsLoggedIn,
                 closeSidebar,
                 closeSubmenu,
                 openSidebar,

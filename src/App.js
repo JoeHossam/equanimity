@@ -20,6 +20,13 @@ import ProfileSettings from './components/ProfileSettings';
 import FavouritesList from './pages/FavouritesList';
 import CompanyDashboard from './pages/company/CompanyDashboard';
 import CompanyLogin from './pages/company/CompanyLogin';
+import CompanyNav from './pages/company/CompanyNav';
+import CompanyProfile from './pages/company/CompanyProfile';
+import AdminNav from './pages/admin/AdminNav';
+import AdminLogin from './pages/admin/AdminLogin';
+import AdminInsurances from './pages/admin/AdminInsurances';
+import AdminCategories from './pages/admin/AdminCategories';
+import AdminCompanies from './pages/admin/AdminCompanies';
 
 const NavLayout = () => {
     return (
@@ -42,6 +49,16 @@ const ProfileLayout = () => {
 const CompanyNavLayout = () => {
     return (
         <>
+            <CompanyNav />
+            <Outlet />
+        </>
+    );
+};
+
+const AdminNavLayout = () => {
+    return (
+        <>
+            <AdminNav />
             <Outlet />
         </>
     );
@@ -84,10 +101,26 @@ function App() {
                 <Route path="/companyadmin" element={<CompanyNavLayout />}>
                     <Route index element={<CompanyDashboard />} />
                     <Route
-                        path="/companyadmin/login"
-                        element={<CompanyLogin />}
+                        path="/companyadmin/profile"
+                        element={<CompanyProfile />}
                     />
                 </Route>
+                <Route path="/admin" element={<AdminNavLayout />}>
+                    <Route
+                        path="/admin/insurances"
+                        element={<AdminInsurances />}
+                    />
+                    <Route
+                        path="/admin/categories"
+                        element={<AdminCategories />}
+                    />
+                    <Route
+                        path="/admin/companies"
+                        element={<AdminCompanies />}
+                    />
+                </Route>
+                <Route path="/companyadmin/login" element={<CompanyLogin />} />
+                <Route path="/admin/login" element={<AdminLogin />} />
             </Routes>
         </Router>
     );

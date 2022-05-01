@@ -4,36 +4,41 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api_url, useGlobalContext } from '../../context';
 
-const CompanyNav = () => {
+const AdminNav = () => {
     const navigate = useNavigate();
-    const { isCompanyLogged, setIsCompanyLogged, companyUser } =
-        useGlobalContext();
+    const { isAdminLogged, setIsAdminLogged } = useGlobalContext();
     useEffect(() => {
-        if (!isCompanyLogged) return navigate('/companyadmin/login');
+        if (!isAdminLogged) return navigate('/admin/login');
     }, []);
     const logout = async () => {
         const res = axios.get(`${api_url}auth/logout`, {
             withCredentials: true,
         });
-        setIsCompanyLogged(false);
+        setIsAdminLogged(false);
         navigate('/companyadmin/login');
     };
 
     return (
         <nav style={{ width: '100%', position: 'sticky' }}>
-            <h2>{companyUser.name}</h2>
+            <h2>Admin Dashboard</h2>
             <ul style={{ display: 'flex', justifyContent: 'space-around' }}>
                 <Button
                     variant="contained"
-                    onClick={() => navigate('/companyadmin')}
+                    onClick={() => navigate('/admin/insurances')}
                 >
-                    Dashboard
+                    Insurances
                 </Button>
                 <Button
                     variant="contained"
-                    onClick={() => navigate('/companyadmin/profile')}
+                    onClick={() => navigate('/admin/categories')}
                 >
-                    Profile
+                    Categories
+                </Button>
+                <Button
+                    variant="contained"
+                    onClick={() => navigate('/admin/companies')}
+                >
+                    Companies
                 </Button>
                 <Button variant="contained" onClick={logout}>
                     Logout
@@ -43,4 +48,4 @@ const CompanyNav = () => {
     );
 };
 
-export default CompanyNav;
+export default AdminNav;

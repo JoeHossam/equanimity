@@ -24,7 +24,24 @@ const Join = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
+    const { isLoggedIn, setIsLoggedIn } = useGlobalContext();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (isLoggedIn) {
+            const logout = async () => {
+                try {
+                    await axios.get(`${api_url}auth/logout`, {
+                        withCredentials: 'true',
+                    });
+                    setIsLoggedIn(false);
+                } catch (error) {
+                    console.log(error.message);
+                }
+            };
+            logout();
+        }
+    }, []);
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -39,6 +56,7 @@ const Join = () => {
                 },
                 { withCredentials: true, 'Content-Type': 'application/json' }
             );
+            setIsLoggedIn(true);
             navigate('/');
         } catch (error) {
             setLoginFail(true);
@@ -68,6 +86,7 @@ const Join = () => {
                 },
                 { withCredentials: true, 'Content-Type': 'application/json' }
             );
+            setIsLoggedIn(true);
             navigate('/');
         } catch (error) {
             console.log(error.response);

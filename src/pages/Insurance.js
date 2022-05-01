@@ -1,4 +1,5 @@
 import { Favorite, FavoriteBorder } from '@mui/icons-material';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { LoadingButton } from '@mui/lab';
 import {
     Avatar,
@@ -11,16 +12,24 @@ import {
     Typography,
     Snackbar,
     Alert,
+    FormControlLabel,
+    Table,
+    TableHead,
+    TableRow,
+    TableCell,
+    TableBody,
+    TableContainer,
+    Paper,
 } from '@mui/material';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useGlobalContext } from '../context.js';
 import { getData, api_url } from '../getData.js';
 
 const Insurance = () => {
     const { id } = useParams();
-    const { user, userLoading } = useGlobalContext();
+    const { user, userLoading, isLoggedIn } = useGlobalContext();
     const [loading, setLoading] = useState(true);
     const [companyLoading, setCompanyLoading] = useState(true);
     const [isFavourite, setIsFavourite] = useState(false);
@@ -28,6 +37,9 @@ const Insurance = () => {
     const [insuranceData, setInsuranceData] = useState([]);
     const [companyData, setCompanyData] = useState([]);
     const [reviewData, setReviewData] = useState([]);
+    const [selectedList, setSelectedList] = useState([]);
+    const [baseList, setBaseList] = useState([]);
+    const [favs, setFavs] = useState(0);
 
     useEffect(() => {
         if (userLoading) return;
@@ -36,11 +48,15 @@ const Insurance = () => {
             console.log(user);
             try {
                 const res = await axios.get(
-                    `${api_url}user/isfavourite?user=${user._id}&insurance=${id}`
+                    `${api_url}user/isfavourite?insurance=${id}`,
+                    { withCredentials: true }
                 );
-                console.log(res.data);
-                if (res.data.isFavourite === true) {
+                console.log(res);
+                setFavs(res.data.count);
+                if (res.data.isFavourite) {
                     setIsFavourite(true);
+                } else {
+                    setIsFavourite(false);
                 }
             } catch (error) {
                 console.log(error);
@@ -48,7 +64,7 @@ const Insurance = () => {
             setLoadingFav(false);
         };
         man();
-    }, [userLoading]);
+    }, [userLoading, isFavourite]);
 
     useEffect(() => {
         setLoading(true);
@@ -67,7 +83,7 @@ const Insurance = () => {
     }, [id]);
 
     useEffect(() => {
-        if (insuranceData === [] || loading) {
+        if (insuranceData.length === 0 || loading) {
             return;
         }
         const fetchCompanyData = async () => {
@@ -75,6 +91,12 @@ const Insurance = () => {
             const comRes = await fetch(`${api_url}company/${createdBy}`);
             const comData = await comRes.json();
             setCompanyData(comData);
+            setSelectedList(
+                insuranceData.insurance.features.map((item) => {
+                    return { ...item, checked: false };
+                })
+            );
+            setBaseList(insuranceData.insurance.baseFeatures);
             setCompanyLoading(false);
         };
         fetchCompanyData();
@@ -83,8 +105,6 @@ const Insurance = () => {
     const toggleFavourite = async () => {
         setLoadingFav(true);
         setIsFavourite(!isFavourite);
-        console.log(user);
-        console.log(!isFavourite);
         try {
             const res1 = await axios.post(
                 `${api_url}user/favourite/toggle`,
@@ -100,12 +120,17 @@ const Insurance = () => {
             const res = await axios.get(
                 `${api_url}user/isfavourite?user=${user._id}&insurance=${id}`
             );
+            console.log(res);
+
             if (res.data.isFavourite) {
                 setIsFavourite(true);
             } else {
                 setIsFavourite(false);
             }
         } catch (error) {
+            console.log('here');
+            console.log(error.response);
+            setIsFavourite(false);
             console.log(error);
         }
     };
@@ -119,10 +144,11 @@ const Insurance = () => {
         title,
         category,
         createdBy,
-        price,
+        basePrice,
         rating, //add rating component mui
         reviewCount,
         description,
+        features,
     } = insuranceData.insurance;
 
     // Get Company
@@ -131,31 +157,241 @@ const Insurance = () => {
     // Get Reviews
     const { reviews } = reviewData;
     return (
-        <main className="section">
-            <h3>{title}</h3>
-            <p>Category: {category}</p>
-            <p>Provided by: {company}</p>
-            <p>Price: {price}</p>
-            <Rating name="read-only" value={rating} precision={0.5} readOnly />
-            <p>Rating: {rating.toFixed(2)}</p>
-            <Checkbox
-                checked={isFavourite}
-                icon={<FavoriteBorder sx={{ color: 'red' }} />}
-                checkedIcon={<Favorite sx={{ color: 'red' }} />}
-                onClick={toggleFavourite}
-            />
-            <Reviews reviewsData={reviews} insuranceId={id} />
+        <main
+            style={{
+                display: 'flex',
+                padding: '1rem',
+            }}
+        >
+            <div style={{ padding: '2rem', width: '100%' }}>
+                <Typography variant="h1">{title}</Typography>
+                <Typography variant="h5">Category: {category}</Typography>
+                <br />
+                <Typography variant="h5">
+                    Provided by:{' '}
+                    <Link
+                        style={{
+                            textDecoration: 'underline',
+                        }}
+                        to={`/company/${companyData.company._id}`}
+                    >
+                        <Typography sx={{ width: 'fit-content' }} variant="h5">
+                            {company}
+                        </Typography>
+                    </Link>
+                </Typography>
+                <br />
+                <Typography variant="h5">
+                    Base Price: {basePrice} EGP
+                </Typography>
+                <br />
+                <Typography variant="h5">Base Services</Typography>
+                <ul>
+                    {baseList.map((item, index) => {
+                        return (
+                            <li key={index}>
+                                <Typography variant="body1">
+                                    - {item}
+                                </Typography>
+                            </li>
+                        );
+                    })}
+                </ul>
+                <br />
+                <Typography variant="h5">Description</Typography>
+                <Typography style={{ whiteSpace: 'pre' }}>
+                    {description}
+                </Typography>
+                <br />
+                <Typography variant="h5">
+                    Rating: {rating.toFixed(2)}
+                </Typography>
+                <Rating
+                    name="read-only"
+                    value={rating}
+                    precision={0.5}
+                    readOnly
+                />
+                <br />
+                <FormControlLabel
+                    control={
+                        <Checkbox
+                            checked={isFavourite}
+                            icon={<FavoriteBorder sx={{ color: 'red' }} />}
+                            checkedIcon={<Favorite sx={{ color: 'red' }} />}
+                            onClick={toggleFavourite}
+                        />
+                    }
+                    label={favs}
+                />
+                <Reviews
+                    reviewsData={reviews}
+                    insuranceId={id}
+                    setReviewData={setReviewData}
+                />
+            </div>
+            <div
+                style={{
+                    height: '100%',
+                }}
+            >
+                <TableContainer component={Paper}>
+                    <Table
+                        sx={{
+                            minWidth: 650,
+                            maxWidth: 800,
+                            maxHeight: 'fit-content',
+                            '& .MuiTableCell-root': {
+                                fontSize: '1rem !important',
+                            },
+                        }}
+                        aria-label="simple table"
+                    >
+                        <TableHead>
+                            <TableRow>
+                                <TableCell align="center" colSpan={2}>
+                                    <Typography variant="h5">
+                                        Services
+                                    </Typography>
+                                </TableCell>
+                                <TableCell align="right">
+                                    <Typography variant="h5">Price</Typography>
+                                </TableCell>
+                                <TableCell
+                                    style={{ width: 'min-width' }}
+                                    align="right"
+                                >
+                                    {/* <Typography variant="h5">Services</Typography> */}
+                                </TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            <TableRow>
+                                <TableCell colSpan={2}>
+                                    Base Services total
+                                </TableCell>
+                                <TableCell align="right">{basePrice}</TableCell>
+                                <TableCell
+                                    align="right"
+                                    sx={{ color: 'green' }}
+                                >
+                                    {'+' + basePrice}
+                                </TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell colSpan={2}>
+                                    <Typography variant="h5">
+                                        Additional Services
+                                    </Typography>
+                                </TableCell>
+                                <TableCell align="right"></TableCell>
+                                <TableCell
+                                    style={{ width: 'min-width' }}
+                                    align="right"
+                                ></TableCell>
+                            </TableRow>
+                            {selectedList.map((row) => (
+                                <TableRow
+                                    key={row._id}
+                                    sx={{
+                                        '&:last-child td, &:last-child th': {
+                                            border: 0,
+                                        },
+                                    }}
+                                >
+                                    <TableCell style={{ width: 40 }}>
+                                        <Checkbox
+                                            checked={row.checked}
+                                            onClick={() =>
+                                                setSelectedList(
+                                                    selectedList.map((item) => {
+                                                        if (
+                                                            item._id !== row._id
+                                                        )
+                                                            return item;
+                                                        return {
+                                                            ...item,
+                                                            checked:
+                                                                !item.checked,
+                                                        };
+                                                    })
+                                                )
+                                            }
+                                        />
+                                    </TableCell>
+                                    <TableCell component="th" scope="row">
+                                        {row.name}
+                                    </TableCell>
+                                    <TableCell align="right">
+                                        {row.price}
+                                    </TableCell>
+                                    <TableCell
+                                        align="right"
+                                        sx={{ color: 'green' }}
+                                    >
+                                        {row.checked && '+' + row.price}
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+
+                            <TableRow>
+                                <TableCell colSpan={2}>
+                                    <Typography variant="h5">
+                                        Estimated Price
+                                    </Typography>
+                                </TableCell>
+                                <TableCell></TableCell>
+                                <TableCell align="right">
+                                    <Typography variant="h5">
+                                        {selectedList.reduce(
+                                            (total, current) => {
+                                                if (current.checked)
+                                                    total += current.price;
+                                                return total;
+                                            },
+                                            basePrice
+                                        )}{' '}
+                                        EGP
+                                    </Typography>
+                                </TableCell>
+                            </TableRow>
+                        </TableBody>
+                    </Table>
+                    <Button
+                        variant="contained"
+                        sx={{ float: 'right', margin: '1rem' }}
+                    >
+                        Proceed to payment
+                    </Button>
+                </TableContainer>
+                <Typography
+                    variant="body1"
+                    sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        marginY: '2rem',
+                        justifyContent: 'center',
+                    }}
+                >
+                    <InfoOutlinedIcon sx={{ marginX: '1rem' }} />
+                    Note that this price is affected by your age, weither you
+                    have chronic disease, or any other personal information you
+                    have previously submitted.
+                </Typography>{' '}
+            </div>
         </main>
     );
 };
 
-const Reviews = ({ reviewsData, insuranceId }) => {
+const Reviews = ({ reviewsData, insuranceId, setReviewData }) => {
     const [userRating, setUserRating] = useState(0);
     const [userComment, setUserComment] = useState('');
     const [loading, setLoading] = useState(true);
     const [reviews, setReviews] = useState([]);
     const [submitting, setSubmitting] = useState(false);
     const [error, setError] = useState('');
+    const { isLoggedIn } = useGlobalContext();
+
     useEffect(() => {
         if (reviewsData === []) {
             return;
@@ -194,7 +430,20 @@ const Reviews = ({ reviewsData, insuranceId }) => {
                 },
                 { withCredentials: true }
             );
+            const revRes = await fetch(`${api_url}review/${insuranceId}`);
+            const revData = await revRes.json();
+            setReviewData(revData);
         } catch (error) {
+            if (error.response.status === 401) {
+                if (!isLoggedIn) {
+                    setError('You must Login first');
+                    setSubmitting(false);
+                    return;
+                }
+                setError('There has been an error try again later');
+                setSubmitting(false);
+                return;
+            }
             setError('you have already reviewed this insurance');
         }
         setSubmitting(false);
@@ -210,7 +459,7 @@ const Reviews = ({ reviewsData, insuranceId }) => {
             <ul
                 style={{
                     overflow: 'auto',
-                    maxHeight: '80vh',
+                    maxHeight: '80%',
                     borderBlockEnd: '1',
                 }}
             >
@@ -249,6 +498,7 @@ const Reviews = ({ reviewsData, insuranceId }) => {
                                                     <p
                                                         style={{
                                                             margin: '18px 0',
+                                                            whiteSpace: 'pre',
                                                         }}
                                                     >
                                                         {item.comment}
@@ -271,7 +521,8 @@ const Reviews = ({ reviewsData, insuranceId }) => {
                 style={{
                     padding: '1rem',
                     backgroundColor: 'transparent',
-                    display: 'grid',
+                    height: 'auto',
+                    // display: 'grid',
                 }}
             >
                 <TextField
@@ -288,14 +539,12 @@ const Reviews = ({ reviewsData, insuranceId }) => {
                 />
                 <Divider />
                 <Rating
-                    sx={{ fontSize: '1.6rem !important' }}
-                    name="simple-controlled"
+                    // sx={{ fontSize: '1.6rem !important' }}
                     value={userRating}
                     precision={0.5}
                     onChange={(event, newValue) => {
                         setUserRating(newValue);
                     }}
-                    required
                 />
                 <LoadingButton
                     loading={submitting}

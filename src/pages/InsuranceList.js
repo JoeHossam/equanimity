@@ -15,6 +15,7 @@ import Filter from '../components/Filter';
 import SingleInsurance from '../components/SingleInsurance';
 import { api_url } from '../getData.js';
 import Slide from '@mui/material/Slide';
+import Loading from './Loading';
 
 const searchContext = React.createContext();
 
@@ -81,7 +82,7 @@ const InsuranceList = () => {
     return (
         <>
             {loading ? (
-                'Loading...'
+                <Loading />
             ) : (
                 <searchContext.Provider
                     value={{ page, setQuery, companies, categories }}
