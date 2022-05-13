@@ -1,4 +1,4 @@
-import { Button } from '@mui/material';
+import { Button, ButtonGroup, Link } from '@mui/material';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -19,32 +19,93 @@ const AdminNav = () => {
     };
 
     return (
-        <nav style={{ width: '100%', position: 'sticky' }}>
-            <h2>Admin Dashboard</h2>
-            <ul style={{ display: 'flex', justifyContent: 'space-around' }}>
-                <Button
+        <div
+            style={{
+                width: '100%',
+                position: 'sticky',
+                top: 0,
+                left: 0,
+                zIndex: '99',
+                backgroundColor: '#1976d2',
+                color: '#fff',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                padding: '0.5rem',
+            }}
+        >
+            <h2 style={{ margin: 0 }}>Admin Dashboard</h2>
+            <ul style={{ display: 'flex', justifyContent: 'space-between' }}>
+                {/* <ButtonGroup> */}
+                <Link
+                    style={{
+                        color: '#fff',
+                        margin: '0 1rem',
+                        cursor: 'pointer',
+                    }}
                     variant="contained"
                     onClick={() => navigate('/admin/insurances')}
                 >
                     Insurances
-                </Button>
-                <Button
-                    variant="contained"
-                    onClick={() => navigate('/admin/categories')}
-                >
-                    Categories
-                </Button>
-                <Button
+                </Link>
+                <Link
+                    style={{
+                        color: '#fff',
+                        margin: '0 1rem',
+                        cursor: 'pointer',
+                    }}
                     variant="contained"
                     onClick={() => navigate('/admin/companies')}
                 >
                     Companies
-                </Button>
-                <Button variant="contained" onClick={logout}>
+                </Link>
+                <Link
+                    style={{
+                        color: '#fff',
+                        margin: '0 1rem',
+                        cursor: 'pointer',
+                    }}
+                    variant="contained"
+                    onClick={() => navigate('/admin/reviews')}
+                >
+                    Reviews
+                </Link>
+                <Link
+                    style={{
+                        color: '#fff',
+                        margin: '0 1rem',
+                        cursor: 'pointer',
+                    }}
+                    variant="contained"
+                    onClick={() => navigate('/admin/categories')}
+                >
+                    Categories
+                </Link>
+                <Link
+                    style={{
+                        color: '#fff',
+                        margin: '0 1rem',
+                        cursor: 'pointer',
+                    }}
+                    variant="contained"
+                    onClick={() => navigate('/admin/users')}
+                >
+                    Users
+                </Link>
+                <Link
+                    style={{
+                        color: '#fff',
+                        margin: '0 1rem',
+                        cursor: 'pointer',
+                    }}
+                    variant="contained"
+                    onClick={logout}
+                >
                     Logout
-                </Button>
+                </Link>
+                {/* </ButtonGroup> */}
             </ul>
-        </nav>
+        </div>
     );
 };
 

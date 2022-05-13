@@ -14,7 +14,6 @@ import React, { useState } from 'react';
 const FeatureList = ({ list, setList }) => {
     const [name, setName] = useState('');
     const [baseName, setBaseName] = useState('');
-
     const [price, setPrice] = useState(0);
     const [basePrice, setBasePrice] = useState(0);
     const [edit, setEdit] = useState({
@@ -91,22 +90,6 @@ const FeatureList = ({ list, setList }) => {
                                                     }
                                                 />
                                             </TableCell>
-                                            {/* <TableCell>
-                                                <TextField
-                                                    size="small"
-                                                    fullWidth
-                                                    label="Price"
-                                                    type="number"
-                                                    value={edit.price}
-                                                    onChange={(e) =>
-                                                        setEdit({
-                                                            ...edit,
-                                                            price: e.target
-                                                                .value,
-                                                        })
-                                                    }
-                                                />
-                                            </TableCell> */}
                                             <TableCell>
                                                 <IconButton
                                                     color="info"
@@ -155,7 +138,6 @@ const FeatureList = ({ list, setList }) => {
                                             >
                                                 {row.name}
                                             </TableCell>
-                                            {/* <TableCell>{row.price}</TableCell> */}
                                             <TableCell sx={{ padding: 0 }}>
                                                 <IconButton
                                                     color="info"
@@ -191,18 +173,6 @@ const FeatureList = ({ list, setList }) => {
                                     }
                                 />
                             </TableCell>
-                            {/* <TableCell>
-                                <TextField
-                                    size="small"
-                                    fullWidth
-                                    label="Price"
-                                    type="number"
-                                    value={basePrice}
-                                    onChange={(e) =>
-                                        setBasePrice(e.target.value)
-                                    }
-                                />
-                            </TableCell> */}
                             <TableCell>
                                 <IconButton
                                     color="success"

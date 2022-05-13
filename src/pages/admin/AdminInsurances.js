@@ -101,6 +101,7 @@ const PublicInsurances = ({ modal, setModal, setSelectedIns, re, setRe }) => {
                 return (
                     <Link
                         size="small"
+                        target={'_blank'}
                         href={`/insurance/${cellvalues.row._id}`}
                     >
                         {cellvalues.value}
@@ -116,6 +117,7 @@ const PublicInsurances = ({ modal, setModal, setSelectedIns, re, setRe }) => {
             renderCell: (cellvalues) => {
                 return (
                     <Link
+                        target={'_blank'}
                         size="small"
                         href={`/company/${cellvalues.value._id}`}
                     >
@@ -151,20 +153,7 @@ const PublicInsurances = ({ modal, setModal, setSelectedIns, re, setRe }) => {
             type: 'number',
             renderCell: (cellvalues) => {
                 return (
-                    <Button
-                        size="small"
-                        onClick={() => {
-                            setModal({
-                                ...modal,
-                                open: true,
-                                type: 'Review',
-                                size: 'md',
-                            });
-                            setSelectedIns(cellvalues.row);
-                        }}
-                    >
-                        {cellvalues.formattedValue}
-                    </Button>
+                    <Button size="small">{cellvalues.formattedValue}</Button>
                 );
             },
             flex: 1,
@@ -280,6 +269,7 @@ const PendingInsurances = ({ modal, setModal, setSelectedIns, re, setRe }) => {
             renderCell: (cellvalues) => {
                 return (
                     <Link
+                        target={'_blank'}
                         size="small"
                         href={`/company/${cellvalues.value._id}`}
                     >
@@ -415,6 +405,7 @@ const AllInsurances = ({ modal, setModal, setSelectedIns }) => {
             renderCell: (cellvalues) => {
                 return (
                     <Link
+                        target={'_blank'}
                         size="small"
                         href={`/company/${cellvalues.value._id}`}
                     >

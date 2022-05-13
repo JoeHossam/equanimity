@@ -305,7 +305,7 @@ const Reviews = ({ reviews, setReviews, insurances }) => {
                             <DialogContentText>
                                 <Rating
                                     value={editRating}
-                                    precision={0.5}
+                                    size="large"
                                     onChange={(event, newValue) => {
                                         setEditRating(newValue);
                                     }}

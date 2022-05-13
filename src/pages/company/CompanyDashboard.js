@@ -283,7 +283,7 @@ const CompanyDashboard = () => {
     }
 
     return (
-        <>
+        <div style={{ margin: '0 5rem' }}>
             <Box sx={{ marginX: '3rem', marginTop: '2rem' }}>
                 <Typography variant="h3">Insurances</Typography>
                 <div style={{ height: 400 }}>
@@ -372,7 +372,7 @@ const CompanyDashboard = () => {
                     />
                 )}
             </Dialog>
-        </>
+        </div>
     );
 };
 

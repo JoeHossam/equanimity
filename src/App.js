@@ -27,6 +27,8 @@ import AdminLogin from './pages/admin/AdminLogin';
 import AdminInsurances from './pages/admin/AdminInsurances';
 import AdminCategories from './pages/admin/AdminCategories';
 import AdminCompanies from './pages/admin/AdminCompanies';
+import AdminReviews from './pages/admin/AdminReviews';
+import AdminUsers from './pages/admin/AdminUsers';
 
 const NavLayout = () => {
     return (
@@ -118,6 +120,8 @@ function App() {
                         path="/admin/companies"
                         element={<AdminCompanies />}
                     />
+                    <Route path="/admin/reviews" element={<AdminReviews />} />
+                    <Route path="/admin/users" element={<AdminUsers />} />
                 </Route>
                 <Route path="/companyadmin/login" element={<CompanyLogin />} />
                 <Route path="/admin/login" element={<AdminLogin />} />

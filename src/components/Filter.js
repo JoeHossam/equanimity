@@ -39,7 +39,7 @@ const Filter = ({ urlCategory }) => {
 
     const applyQuery = () => {
         let query = `?page=${page}`;
-        const priceQuery = `price>=${priceRange[0]},price<=${priceRange[1]}`;
+        const priceQuery = `basePrice>${priceRange[0]},basePrice<${priceRange[1]}`;
         const ratingQuery = `rating>=${rating}`;
         const companiesQuery = `company=${selectedCompanies
             .map((item) => item._id)
@@ -293,10 +293,10 @@ const Filter = ({ urlCategory }) => {
                         <MenuItem value={'Alphabetic'} selected>
                             Alphabetic
                         </MenuItem>
-                        <MenuItem value={'price'}>
+                        <MenuItem value={'basePrice'}>
                             Price <ArrowUpwardIcon fontSize="1px" />
                         </MenuItem>
-                        <MenuItem value={'-price'}>
+                        <MenuItem value={'-basePrice'}>
                             Price <ArrowDownwardIcon fontSize="1px" />
                         </MenuItem>
                         <MenuItem value={'rating'}>

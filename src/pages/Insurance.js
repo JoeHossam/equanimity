@@ -209,7 +209,7 @@ const Insurance = () => {
                 <Rating
                     name="read-only"
                     value={rating}
-                    precision={0.5}
+                    precision={0.2}
                     readOnly
                 />
                 <br />
@@ -541,7 +541,6 @@ const Reviews = ({ reviewsData, insuranceId, setReviewData }) => {
                 <Rating
                     // sx={{ fontSize: '1.6rem !important' }}
                     value={userRating}
-                    precision={0.5}
                     onChange={(event, newValue) => {
                         setUserRating(newValue);
                     }}
