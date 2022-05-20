@@ -24,7 +24,7 @@ import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 
-const Filter = ({ urlCategory }) => {
+const Filter = ({ urlCategory, search }) => {
     const { page, setQuery, companies, categories } = useSearchContext();
     const [priceRange, setPriceRange] = useState([1000, 8000]);
     const [rating, setRating] = useState(1);
@@ -38,7 +38,7 @@ const Filter = ({ urlCategory }) => {
     const [addCategories, setAddCategories] = useState(false);
 
     const applyQuery = () => {
-        let query = `?page=${page}`;
+        let query = `?page=${page}&title=${search}`;
         const priceQuery = `basePrice>${priceRange[0]},basePrice<${priceRange[1]}`;
         const ratingQuery = `rating>=${rating}`;
         const companiesQuery = `company=${selectedCompanies
@@ -63,12 +63,22 @@ const Filter = ({ urlCategory }) => {
         setQuery(query);
     };
 
-    const eveloaded = () => {
-        if (urlCategory) {
-            setAddCategories(true);
-        }
-        // setSelectedCategories(urlCategory);
-    };
+    const [fixer, setFixer] = useState(true);
+    useEffect(() => {
+        if (!urlCategory) return;
+        setAddCategories(true);
+        setSelectedCategories([urlCategory]);
+        setFixer(false);
+    }, [urlCategory]);
+
+    useEffect(() => {
+        if (fixer) return;
+        applyQuery();
+    }, [fixer]);
+
+    useEffect(() => {
+        applyQuery();
+    }, [search]);
 
     return (
         <Box
@@ -77,6 +87,9 @@ const Filter = ({ urlCategory }) => {
                 minWidth: '285px',
                 padding: '1rem',
                 textAlign: 'center',
+                ['@media (max-width:880px)']: {
+                    margin: 'auto',
+                },
             }}
         >
             <Typography mx={'0.5rem'} fontSize="1.5rem">
@@ -241,7 +254,7 @@ const Filter = ({ urlCategory }) => {
                         value={selectedCategories}
                         onChange={(event, newValue) => {
                             setSelectedCategories(newValue);
-                            console.log(selectedCategories);
+                            console.log(newValue);
                         }}
                         id="checkboxes-tags-demo"
                         options={categories}
@@ -311,6 +324,7 @@ const Filter = ({ urlCategory }) => {
                 </FormControl>
                 <Button
                     variant="contained"
+                    disableRipple
                     size="medium"
                     sx={{ fontSize: '0.75rem' }}
                     onClick={applyQuery}

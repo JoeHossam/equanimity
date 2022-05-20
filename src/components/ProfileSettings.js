@@ -10,31 +10,67 @@ import {
     Snackbar,
     Alert,
     CardHeader,
+    Button,
 } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import EditIcon from '@mui/icons-material/Edit';
 import { useGlobalContext, api_url } from '../context';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import FileBase from 'react-file-base64';
+import { Image } from '@mantine/core';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 const ProfileSettings = () => {
-    const { user, setUser, userLoading } = useGlobalContext();
+    const { user, setUser, userLoading, setIsLoggedIn } = useGlobalContext();
     const [fetching, setFetching] = useState(false);
     const [passFetching, setPassFetching] = useState(false);
+    const [deleteFetching, setDeleteFetching] = useState(false);
     const [newImage, setNewImage] = useState('');
     const [showError, setShowError] = useState({});
+    const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
 
     const [newPassword, setNewPassword] = useState('');
     const [oldPassword, setOldPassword] = useState('');
     const [name, setName] = useState('');
+    const [phone, setPhone] = useState('');
+    const [age, setAge] = useState('');
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (!userLoading) setName(user.name);
+        if (userLoading) return;
+        setName(user.name);
+        setPhone(user.phone);
+        setAge(user.age);
     }, [userLoading]);
 
     const changePhoto = (e) => {
-        setNewImage(e.taget.files[0]);
+        e.preventDefault();
+        const updateImage = async () => {
+            try {
+                const res = await axios.patch(
+                    `${api_url}user`,
+                    { img: newImage },
+                    {
+                        withCredentials: true,
+                    }
+                );
+                console.log(res.data);
+            } catch (error) {
+                console.log(error.message);
+            }
+            setUser({ ...user, name });
+            setShowError({
+                isError: 'true',
+                msg: 'Updated Succefully',
+                type: 'success',
+            });
+        };
+        updateImage();
     };
 
     const handleUpdate = async (e) => {
@@ -43,7 +79,7 @@ const ProfileSettings = () => {
         try {
             const res = await axios.patch(
                 `${api_url}user`,
-                { name },
+                { name, phone, age },
                 {
                     withCredentials: true,
                 }
@@ -59,7 +95,6 @@ const ProfileSettings = () => {
             msg: 'Updated Succefully',
             type: 'success',
         });
-        // window.location.reload(false);
     };
 
     const handlePassword = async (e) => {
@@ -99,6 +134,25 @@ const ProfileSettings = () => {
 
         setPassFetching(false);
     };
+
+    const handleDelete = async (e) => {
+        e.preventDefault();
+        setDeleteFetching(true);
+        try {
+            const res = await axios.delete(`${api_url}user/`, {
+                withCredentials: true,
+            });
+            setIsLoggedIn(false);
+            navigate('/');
+        } catch (error) {
+            setShowError({
+                isError: 'true',
+                msg: 'Something went wrong. Try again later.',
+                type: 'warning',
+            });
+        }
+        setDeleteFetching(true);
+    };
     if (userLoading) {
         return 'loading..';
     }
@@ -113,39 +167,21 @@ const ProfileSettings = () => {
                         alignItems: 'center',
                     }}
                 >
-                    <Tooltip
-                        title={
-                            <div
-                                style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                }}
-                            >
-                                <EditIcon /> Change
-                            </div>
-                        }
-                    >
-                        <div onClick={changePhoto}>
-                            <label
-                                style={{ cursor: 'pointer' }}
-                                htmlFor="file-input"
-                            >
-                                <Avatar
-                                    alt={user.name}
-                                    src={
-                                        'https://images.unsplash.com/photo-1650875808907-52874cdb6b2a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=866&q=80'
-                                    }
-                                    sx={{ width: 128, height: 128 }}
-                                />
-                            </label>
-                            <input
-                                id="file-input"
-                                type="file"
-                                style={{ display: 'none' }}
-                                onChange={changePhoto}
+                    <div>
+                        <form onSubmit={changePhoto} htmlFor="file-input">
+                            <Avatar
+                                alt={user.name}
+                                src={newImage === '' ? user.img : newImage}
+                                sx={{ width: 128, height: 128 }}
                             />
-                        </div>
-                    </Tooltip>
+                            <FileBase
+                                type="file"
+                                multiple={false}
+                                onDone={({ base64 }) => setNewImage(base64)}
+                            />
+                            <Button type="submit">Submit</Button>
+                        </form>
+                    </div>
                     <Typography variant="h2">{user.name}</Typography>
                 </Box>
             }
@@ -171,8 +207,38 @@ const ProfileSettings = () => {
                                 autoComplete="name"
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
-                                // helperText={registerFail.name || ' '}
-                                // error={registerFail.name}
+                            />
+                            <TextField
+                                sx={{
+                                    marginY: '0.25rem',
+                                    maxWidth: '444px',
+                                }}
+                                id="age"
+                                label="Age"
+                                fullWidth
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                                name="age"
+                                autoComplete="age"
+                                value={age}
+                                onChange={(e) => setAge(e.target.value)}
+                            />
+                            <TextField
+                                sx={{
+                                    marginY: '0.25rem',
+                                    maxWidth: '444px',
+                                }}
+                                id="phone"
+                                label="phone"
+                                fullWidth
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                                name="phone"
+                                autoComplete="phone"
+                                value={phone}
+                                onChange={(e) => setPhone(e.target.value)}
                             />
                             <TextField
                                 sx={{
@@ -251,6 +317,19 @@ const ProfileSettings = () => {
                                 Update password
                             </LoadingButton>
                         </form>
+                        <Divider />
+
+                        <LoadingButton
+                            type="submit"
+                            variant="contained"
+                            color="error"
+                            sx={{ mt: 2, mb: 2 }}
+                            loading={deleteFetching}
+                            disableFocusRipple
+                            onClick={() => setOpenDeleteDialog(true)}
+                        >
+                            Delete Account
+                        </LoadingButton>
                     </Box>
                     <Snackbar
                         open={showError.isError}
@@ -272,6 +351,31 @@ const ProfileSettings = () => {
                             {showError.msg}
                         </Alert>
                     </Snackbar>
+                    <Dialog
+                        open={openDeleteDialog}
+                        onClose={() => setOpenDeleteDialog(false)}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                    >
+                        <DialogTitle id="alert-dialog-title">
+                            {'Delete Account'}
+                        </DialogTitle>
+                        <DialogContent>
+                            <DialogContentText id="alert-dialog-description">
+                                Are you sure you want to delete your account?
+                                all data on this account will be lost and there
+                                is no going back
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={() => setOpenDeleteDialog(false)}>
+                                cancel
+                            </Button>
+                            <Button color="error" onClick={handleDelete}>
+                                Delete
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
                 </>
             }
         />

@@ -10,6 +10,7 @@ const AppProvider = ({ children }) => {
     const [isSubmenuOpen, setIsSubmenuOpen] = useState(false);
     const [submenuLocation, setSubmenuLocation] = useState({});
     const [submenuData, setSubmenuData] = useState();
+    const [search, setSearch] = useState('');
 
     //authentication
     //user
@@ -102,6 +103,8 @@ const AppProvider = ({ children }) => {
                 companyUser,
                 isCompanyLogged,
                 isAdminLogged,
+                search,
+                setSearch,
                 setIsAdminLogged,
                 setCompanyUser,
                 setIsCompanyLogged,

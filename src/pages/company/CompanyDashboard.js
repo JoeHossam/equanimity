@@ -37,6 +37,8 @@ import { api_url, useGlobalContext } from '../../context';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import FeatureList from './FeatureList';
 import CloseIcon from '@mui/icons-material/Close';
+import { RichTextEditor } from '@mantine/rte';
+import { useNavigate } from 'react-router-dom';
 
 const rows = [
     {
@@ -324,7 +326,7 @@ const CompanyDashboard = () => {
                                 ...modal,
                                 open: true,
                                 type: 'create',
-                                size: 'lg',
+                                size: 'full',
                             });
                         }}
                     >
@@ -332,7 +334,7 @@ const CompanyDashboard = () => {
                     </Button>
                 </Box>
                 <Typography variant="h3">Purchases</Typography>
-                <Purchases />
+                <Purchases insurances={data} />
             </Box>
             <Dialog
                 open={modal.open}
@@ -340,6 +342,7 @@ const CompanyDashboard = () => {
                 keepMounted
                 fullWidth={modal.size !== ''}
                 maxWidth={modal.size}
+                fullScreen={modal.size === 'full'}
                 scroll="paper"
                 onClose={() => setModal({ ...modal, open: false })}
                 aria-describedby="alert-dialog-slide-description"
@@ -388,6 +391,7 @@ const Create = ({ setModal, setRe }) => {
         hidden: false,
         description: '',
     });
+    const [description, setDescription] = useState('');
     const [featureList, setFeatureList] = useState([]);
     const [categories, setCategories] = useState([]);
 
@@ -415,6 +419,7 @@ const Create = ({ setModal, setRe }) => {
                 `${api_url}insurance`,
                 {
                     ...insurance,
+                    description,
                     baseFeatures: featureList
                         .filter((item) => item.isBase)
                         .map((item) => {
@@ -453,7 +458,10 @@ const Create = ({ setModal, setRe }) => {
             <DialogTitle>{'Create a new Insurance'}</DialogTitle>
             <DialogContent dividers={true}>
                 <DialogContentText component={'div'}>
-                    <form onSubmit={handleSubmit}>
+                    <form
+                        onSubmit={handleSubmit}
+                        style={{ textAlign: 'start' }}
+                    >
                         <div
                             style={{
                                 display: 'grid',
@@ -506,19 +514,10 @@ const Create = ({ setModal, setRe }) => {
                                 })
                             }
                         />
-
-                        <TextField
-                            fullWidth
-                            label="Description"
-                            sx={{ marginBottom: '1rem' }}
-                            onChange={(e) =>
-                                setInsurance({
-                                    ...insurance,
-                                    description: e.target.value,
-                                })
-                            }
-                            multiline
-                            minRows={3}
+                        <RichTextEditor
+                            sx={{ width: '100%' }}
+                            value={description}
+                            onChange={setDescription}
                         />
                         <FormControlLabel
                             control={
@@ -575,6 +574,9 @@ const Edit = ({ setModal, selectedIns, setRe }) => {
             return { name: item, isBase: true };
         }),
     ]);
+
+    const [description, setDescription] = useState(selectedIns.description);
+
     const [categories, setCategories] = useState([]);
 
     useEffect(() => {
@@ -604,6 +606,7 @@ const Edit = ({ setModal, selectedIns, setRe }) => {
                 return { name: item, isBase: true };
             }),
         ]);
+        setDescription(selectedIns.description);
     }, [selectedIns]);
 
     const handleSubmit = async (e) => {
@@ -705,20 +708,10 @@ const Edit = ({ setModal, selectedIns, setRe }) => {
                                 })
                             }
                         />
-
-                        <TextField
-                            fullWidth
-                            label="Description"
-                            value={insurance.description}
-                            sx={{ marginBottom: '1rem' }}
-                            onChange={(e) =>
-                                setInsurance({
-                                    ...insurance,
-                                    description: e.target.value,
-                                })
-                            }
-                            multiline
-                            minRows={3}
+                        <RichTextEditor
+                            sx={{ width: '100%' }}
+                            value={description}
+                            onChange={setDescription}
                         />
                         <FormControlLabel
                             control={
@@ -992,38 +985,90 @@ const Reviews = ({ setModal, selectedIns, setRe }) => {
     );
 };
 
-const Purchases = () => {
+const Purchases = ({ insurances }) => {
+    const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        setLoading(true);
+        const fetchData = async () => {
+            try {
+                const res = await axios.get(`${api_url}payment/company`, {
+                    withCredentials: true,
+                });
+                setData(
+                    res.data.payments.map((item) => {
+                        return {
+                            ...item,
+                            insurance: insurances.find(
+                                (item2) => item2._id === item.insuranceId
+                            ),
+                        };
+                    })
+                );
+                setLoading(false);
+            } catch (error) {
+                console.log(error.response);
+            }
+        };
+        fetchData();
+    }, []);
+
+    if (loading) {
+        return <Loading />;
+    }
+
     return (
         <TableContainer sx={{ marginBottom: '3rem' }} component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
                     <TableRow>
-                        <TableCell>Dessert (100g serving)</TableCell>
-                        <TableCell align="right">Calories</TableCell>
-                        <TableCell align="right">Fat&nbsp;(g)</TableCell>
-                        <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-                        <TableCell align="right">Protein&nbsp;(g)</TableCell>
+                        <TableCell>Insurance name</TableCell>
+                        <TableCell align="right">Phone</TableCell>
+                        <TableCell align="right">Features Bought</TableCell>
+                        <TableCell align="right">total price</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {rows.map((row) => (
-                        <TableRow
-                            key={row.name}
-                            sx={{
-                                '&:last-child td, &:last-child th': {
-                                    border: 0,
-                                },
-                            }}
-                        >
-                            <TableCell component="th" scope="row">
-                                {row.name}
-                            </TableCell>
-                            <TableCell align="right">{row.calories}</TableCell>
-                            <TableCell align="right">{row.fat}</TableCell>
-                            <TableCell align="right">{row.carbs}</TableCell>
-                            <TableCell align="right">{row.protein}</TableCell>
-                        </TableRow>
-                    ))}
+                    {data.length === 0
+                        ? 'List is empty'
+                        : data.map((row) => (
+                              <TableRow
+                                  key={row._id}
+                                  sx={{
+                                      '&:last-child td, &:last-child th': {
+                                          border: 0,
+                                      },
+                                  }}
+                              >
+                                  <TableCell
+                                      sx={{ cursor: 'pointer' }}
+                                      component="th"
+                                      scope="row"
+                                      onClick={() =>
+                                          navigate(
+                                              `/insurance/${row.insuranceId}`
+                                          )
+                                      }
+                                  >
+                                      {row.insurance.title}
+                                  </TableCell>
+                                  <TableCell align="right">
+                                      {row.phone}
+                                  </TableCell>
+                                  <TableCell align="right">
+                                      {row.features.length === 0
+                                          ? '-'
+                                          : row.features.map((feature) => {
+                                                return <li>{feature.name}</li>;
+                                            })}
+                                  </TableCell>
+                                  <TableCell align="right">
+                                      {row.totalPrice} EGP
+                                  </TableCell>
+                              </TableRow>
+                          ))}
                 </TableBody>
             </Table>
         </TableContainer>

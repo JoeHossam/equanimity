@@ -1,6 +1,8 @@
 import {
     Avatar,
+    Button,
     CardHeader,
+    Dialog,
     DialogActions,
     DialogContent,
     DialogContentText,
@@ -13,11 +15,14 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { api_url } from '../../context';
 import Loading from '../Loading';
 
 const AdminReviews = () => {
     const [loading, setLoading] = useState(true);
+    const [openDelModal, setOpenDelModal] = useState(false);
+    const [deleteId, setDeleteId] = useState(0);
     const [reviews, setReviews] = useState([]);
     const [sortBy, setSortBy] = useState('dateup');
     useEffect(() => {
@@ -54,7 +59,7 @@ const AdminReviews = () => {
                 setLoading(false);
             } catch (error) {
                 setLoading(false);
-                console.error(error.response);
+                console.error(error);
             }
         };
         fetchRev();
@@ -83,6 +88,16 @@ const AdminReviews = () => {
                 break;
         }
     }, [sortBy]);
+
+    const handleDelete = async () => {
+        try {
+            const res = await axios.delete(`${api_url}review/${deleteId}`, {
+                withCredentials: true,
+            });
+        } catch (error) {
+            console.log(error.response);
+        }
+    };
 
     if (loading) {
         return <Loading />;
@@ -115,6 +130,8 @@ const AdminReviews = () => {
                                         key={item._id}
                                         style={{
                                             backgroundColor: 'white',
+                                            margin: '1rem 0',
+                                            border: '1px solid #ccc',
                                         }}
                                     >
                                         <CardHeader
@@ -122,7 +139,7 @@ const AdminReviews = () => {
                                             avatar={
                                                 <Avatar
                                                     // alt={item.userName}
-                                                    src={item.img}
+                                                    src={item.userName.img}
                                                 />
                                             }
                                             title={
@@ -139,9 +156,33 @@ const AdminReviews = () => {
                                                             {item.userName.name}
                                                         </div>
                                                         <div>
-                                                            {item.insuranceName
-                                                                .title ||
-                                                                'deleted Insurance'}
+                                                            <Link
+                                                                to={`/insurance/${item.insuranceId}`}
+                                                                target="_blank"
+                                                            >
+                                                                {item
+                                                                    .insuranceName
+                                                                    .title ||
+                                                                    'deleted Insurance'}
+                                                            </Link>
+                                                            <Button
+                                                                sx={{
+                                                                    marginLeft:
+                                                                        '1rem',
+                                                                }}
+                                                                variant="contained"
+                                                                onClick={() => {
+                                                                    setOpenDelModal(
+                                                                        true
+                                                                    );
+                                                                    setDeleteId(
+                                                                        item._id
+                                                                    );
+                                                                }}
+                                                                color="error"
+                                                            >
+                                                                Delete
+                                                            </Button>
                                                         </div>
                                                     </Typography>
 
@@ -175,6 +216,29 @@ const AdminReviews = () => {
                     </ul>
                 </DialogContentText>
             </DialogContent>
+            <Dialog
+                open={openDelModal}
+                onClose={() => setOpenDelModal(false)}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">
+                    {'Delete Review?'}
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        Are you sure you want to delete this review
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setOpenDelModal(false)}>
+                        Cancel
+                    </Button>
+                    <Button color="error" onClick={handleDelete} autoFocus>
+                        Delete
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </>
     );
 };

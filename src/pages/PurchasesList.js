@@ -7,7 +7,6 @@ import {
     Checkbox,
     CircularProgress,
     Divider,
-    FormControlLabel,
     Grid,
     Pagination,
     Skeleton,
@@ -17,7 +16,6 @@ import { Box } from '@mui/system';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Check, Plus } from 'tabler-icons-react';
 import { api_url, useGlobalContext } from '../context';
 
 const InsuranceSkeleton = () => {
@@ -32,13 +30,10 @@ const InsuranceSkeleton = () => {
     );
 };
 
-const Insurance = ({ insuranceId, companies }) => {
-    const { user, userLoading } = useGlobalContext();
-    const [isFavourite, setIsFavourite] = useState(true);
+const Insurance = ({ insuranceId, companies, totalPrice, features }) => {
     const [loading, setLoading] = useState(true);
     const [insurance, setInsurance] = useState({});
     const [company, setCompany] = useState({});
-
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -62,43 +57,6 @@ const Insurance = ({ insuranceId, companies }) => {
         fetchInsurance();
     }, []);
 
-    useEffect(() => {
-        if (userLoading) return;
-        const man = async () => {
-            try {
-                const res = await axios.get(
-                    `${api_url}user/isfavourite?user=${user._id}&insurance=${insuranceId}`,
-                    { withCredentials: true }
-                );
-                console.log(res);
-                if (res.data.isFavourite === true) {
-                    setIsFavourite(true);
-                }
-            } catch (error) {
-                console.log(error.response);
-            }
-        };
-        man();
-    }, [userLoading]);
-
-    const toggleFavourite = async () => {
-        try {
-            const res1 = await axios.post(
-                `${api_url}user/favourite/toggle`,
-                {
-                    favouriting: !isFavourite,
-                    insurance: _id,
-                    user: user._id,
-                    userType: user.provider === 'local' ? 'User' : 'OAuthUser',
-                },
-                { withCredentials: true, 'Content-Type': 'application/json' }
-            );
-
-            setIsFavourite(res1.data.msg);
-        } catch (error) {
-            console.log(error.response);
-        }
-    };
     const {
         _id,
         title,
@@ -117,79 +75,66 @@ const Insurance = ({ insuranceId, companies }) => {
                         <Typography
                             gutterBottom
                             variant="h5"
-                            sx={{
-                                display: 'flex',
-                                justifyContent: 'space-between',
-                            }}
+                            onClick={() => navigate(`/insurance/${_id}`)}
+                            sx={{ cursor: 'pointer' }}
                             component="div"
                         >
-                            <Box
-                                onClick={() => navigate(`/insurance/${_id}`)}
-                                sx={{ cursor: 'pointer' }}
-                            >
-                                {title}
-                            </Box>
-                            <FormControlLabel
-                                sx={{ margin: 0 }}
-                                control={
-                                    <Checkbox
-                                        disableRipple
-                                        sx={{ padding: 0 }}
-                                        checked={isFavourite}
-                                        icon={
-                                            <Button
-                                                disableRipple
-                                                size="small"
-                                                sx={{
-                                                    margin: 0,
-                                                    border: '2px solid #1976d2 !important',
-                                                }}
-                                                variant="outlined"
-                                            >
-                                                <Plus size={20} />
-                                                Save
-                                            </Button>
-                                        }
-                                        checkedIcon={
-                                            <Button
-                                                disableRipple
-                                                size="small"
-                                                variant="contained"
-                                                sx={{ margin: 0 }}
-                                            >
-                                                <Check size={20} />
-                                                Saved
-                                            </Button>
-                                        }
-                                        onClick={toggleFavourite}
-                                    />
-                                }
-                            />
+                            {/* <Link to={`/insurance/${_id}`}> */}
+                            {title}
                         </Typography>
                         <Typography
                             variant="subtitle1"
                             sx={{ cursor: 'pointer' }}
                             onClick={() => navigate(`/company/${createdBy}`)}
                         >
+                            {/* <Link to={`/company/${createdBy}`}> */}
                             {company.name}
                         </Typography>
                         <Divider />
-                        <Typography variant="subtitle1">{category}</Typography>
+                        {features.length !== 0 && (
+                            <>
+                                <Typography
+                                    variant="subtitle2"
+                                    sx={{ marginTop: '0.5rem' }}
+                                >
+                                    Additional Coverages
+                                </Typography>
+                                <Typography
+                                    variant="subtitle2"
+                                    sx={{ marginTop: '0.5rem' }}
+                                >
+                                    {features.map((item, index) => {
+                                        return (
+                                            <li key={index}>
+                                                {item.name} -{' '}
+                                                {item.price.toFixed(2)} EGP
+                                            </li>
+                                        );
+                                    })}
+                                </Typography>
+                            </>
+                        )}
+                        <Divider />
                         <Typography
                             variant="subtitle2"
                             sx={{ marginTop: '0.5rem' }}
                         >
-                            {price} EGP
+                            Total {totalPrice} EGP
                         </Typography>
                     </CardContent>
                     <Divider />
+                    {/* <CardActions>
+                        <Button size="small">
+                            <Link to={`/insurance/${_id}`}>See More</Link>
+                        </Button>
+                    </CardActions> */}
                 </Card>
             )}
         </div>
     );
 };
 
-const FavouritesList = () => {
+const PurchaseList = () => {
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState([]);
     const [companies, setCompanies] = useState([]);
@@ -197,16 +142,15 @@ const FavouritesList = () => {
     useEffect(() => {
         setLoading(true);
         const fetchData = async () => {
-            const preRes = await axios.get(`${api_url}user/favourite`, {
+            const preRes = await axios.get(`${api_url}payment/user`, {
                 withCredentials: true,
             });
-            const { favourites } = preRes.data;
+            const { payments } = preRes.data;
+            setData(payments);
 
-            setData(favourites);
+            const res = await axios.get(`${api_url}company`);
+            setCompanies(res.data.companies);
 
-            const res2 = await fetch(`${api_url}company`);
-            const { companies: companiesData } = await res2.json();
-            setCompanies(companiesData);
             setLoading(false);
         };
         fetchData();
@@ -219,15 +163,11 @@ const FavouritesList = () => {
                     <CircularProgress />
                 </Box>
             ) : data.length === 0 ? (
-                'You have no favourites'
+                "You havn't made any purchases yet"
             ) : (
                 <div>
-                    <Typography
-                        variant="h2"
-                        align="center"
-                        sx={{ marginBottom: '3rem' }}
-                    >
-                        saved insurances
+                    <Typography variant="h2" sx={{ marginBottom: '3rem' }}>
+                        my purchases
                     </Typography>
                     <div
                         style={{
@@ -251,8 +191,8 @@ const FavouritesList = () => {
                                 >
                                     <Insurance
                                         key={item._id}
-                                        insuranceId={item.insuranceId}
                                         companies={companies}
+                                        {...item}
                                     />
                                 </Grid>
                             );
@@ -263,4 +203,4 @@ const FavouritesList = () => {
         </div>
     );
 };
-export default FavouritesList;
+export default PurchaseList;

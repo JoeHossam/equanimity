@@ -29,12 +29,49 @@ import AdminCategories from './pages/admin/AdminCategories';
 import AdminCompanies from './pages/admin/AdminCompanies';
 import AdminReviews from './pages/admin/AdminReviews';
 import AdminUsers from './pages/admin/AdminUsers';
+import { HeaderSearch } from './components/navbar2.js';
+import NotFound from './pages/notFound';
+import Footer from './components/Footer';
+import PurchaseList from './pages/PurchasesList';
 
 const NavLayout = () => {
     return (
         <>
-            <Navbar />
-            <Outlet />
+            <HeaderSearch
+                links={[
+                    { link: '/', label: 'Home' },
+                    { link: '/about', label: 'About' },
+                    { link: '/insurances', label: 'Insurances' },
+                    { link: '/companies', label: 'Comapanies' },
+                ]}
+            />
+            <div
+                style={{
+                    minHeight: 'calc(100vh - 150px)',
+                }}
+            >
+                <Outlet />
+            </div>
+            <Footer
+                links={[
+                    {
+                        link: '#',
+                        label: 'Contact',
+                    },
+                    {
+                        link: '#',
+                        label: 'Privacy',
+                    },
+                    {
+                        link: '#',
+                        label: 'Blog',
+                    },
+                    {
+                        link: '#',
+                        label: 'Careers',
+                    },
+                ]}
+            />
         </>
     );
 };
@@ -87,6 +124,10 @@ function App() {
                             path="/profile/Reviews"
                             element={<ProfileReviews />}
                         />
+                        <Route
+                            path="/profile/purchases"
+                            element={<PurchaseList />}
+                        />
                     </Route>
 
                     <Route path="/insurances" element={<InsuranceList />} />
@@ -97,7 +138,7 @@ function App() {
                     <Route path="/companies" element={<CompanyList />} />
                     <Route path="/company/:id" element={<Company />} />
                     <Route path="/insurance/:id" element={<Insurance />} />
-                    <Route path="*" element={<Error />} />
+                    <Route path="*" element={<NotFound />} />
                 </Route>
                 <Route path="/join" element={<Join />} />
                 <Route path="/companyadmin" element={<CompanyNavLayout />}>

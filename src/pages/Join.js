@@ -24,6 +24,8 @@ const Join = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
+    const [age, setAge] = useState('');
+    const [phone, setPhone] = useState('');
     const { isLoggedIn, setIsLoggedIn } = useGlobalContext();
     const navigate = useNavigate();
 
@@ -75,6 +77,8 @@ const Join = () => {
                     name: name,
                     email: email,
                     password: password,
+                    age,
+                    phone,
                 },
                 { withCredentials: true, 'Content-Type': 'application/json' }
             );
@@ -147,7 +151,7 @@ const Join = () => {
                             autoFocus
                             value={name}
                             onChange={(e) => setName(e.target.value)}
-                            helperText={registerFail.name || ' '}
+                            helperText={registerFail.name}
                             error={registerFail.name}
                         />
                         <TextField
@@ -160,7 +164,7 @@ const Join = () => {
                             autoComplete="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            helperText={registerFail.email || ' '}
+                            helperText={registerFail.email}
                             error={registerFail.email}
                         />
                         <TextField
@@ -174,8 +178,36 @@ const Join = () => {
                             autoComplete="current-password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            helperText={registerFail.password || ' '}
+                            helperText={registerFail.password}
                             error={registerFail.password}
+                        />
+                        <TextField
+                            sx={{ marginY: '0.25rem' }}
+                            required
+                            fullWidth
+                            name="age"
+                            label="age"
+                            type="number"
+                            id="age"
+                            autoComplete="current-age"
+                            value={age}
+                            onChange={(e) => setAge(e.target.value)}
+                            helperText={registerFail.age}
+                            error={registerFail.age}
+                        />
+                        <TextField
+                            sx={{ marginY: '0.25rem' }}
+                            required
+                            fullWidth
+                            name="phone"
+                            label="phone"
+                            type="number"
+                            id="phone"
+                            autoComplete="current-password"
+                            value={phone}
+                            onChange={(e) => setPhone(e.target.value)}
+                            helperText={registerFail.phone}
+                            error={registerFail.phone}
                         />
                         <LoadingButton
                             type="submit"

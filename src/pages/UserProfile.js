@@ -26,7 +26,7 @@ export default function NavTabs() {
 
     return (
         <Box sx={{ width: '100%' }}>
-            <Tabs
+            {/* <Tabs
                 value={value}
                 onChange={handleChange}
                 aria-label="nav tabs example"
@@ -43,7 +43,11 @@ export default function NavTabs() {
                     onClick={() => navigate('/profile/reviews')}
                     label="Reviews"
                 />
-            </Tabs>
+                <LinkTab
+                    onClick={() => navigate('/profile/purchases')}
+                    label="Purchases"
+                />
+            </Tabs> */}
         </Box>
     );
 }
