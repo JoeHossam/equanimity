@@ -77,7 +77,7 @@ const HomePartners = () => {
                                 },
                             })}
                         >
-                            <Image src={item.image} alt={item.name} />
+                            <Image src={item.img} alt={item.name} />
                         </Paper>
                     );
                 })}

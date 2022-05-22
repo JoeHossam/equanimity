@@ -66,6 +66,17 @@ const AdminNav = () => {
                         cursor: 'pointer',
                     }}
                     variant="contained"
+                    onClick={() => navigate('/admin/payments')}
+                >
+                    Payments
+                </Link>
+                <Link
+                    style={{
+                        color: '#fff',
+                        margin: '0 1rem',
+                        cursor: 'pointer',
+                    }}
+                    variant="contained"
                     onClick={() => navigate('/admin/reviews')}
                 >
                     Reviews
@@ -88,10 +99,21 @@ const AdminNav = () => {
                         cursor: 'pointer',
                     }}
                     variant="contained"
+                    onClick={() => navigate('/admin/contact')}
+                >
+                    Contacts
+                </Link>
+                {/* <Link
+                    style={{
+                        color: '#fff',
+                        margin: '0 1rem',
+                        cursor: 'pointer',
+                    }}
+                    variant="contained"
                     onClick={() => navigate('/admin/users')}
                 >
                     Users
-                </Link>
+                </Link> */}
                 <Link
                     style={{
                         color: '#fff',

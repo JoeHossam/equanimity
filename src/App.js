@@ -33,6 +33,8 @@ import { HeaderSearch } from './components/navbar2.js';
 import NotFound from './pages/notFound';
 import Footer from './components/Footer';
 import PurchaseList from './pages/PurchasesList';
+import AdminContact from './pages/admin/AdminContact';
+import AdminPayments from './pages/admin/AdminPayments';
 
 const NavLayout = () => {
     return (
@@ -161,7 +163,9 @@ function App() {
                         path="/admin/companies"
                         element={<AdminCompanies />}
                     />
+                    <Route path="/admin/payments" element={<AdminPayments />} />
                     <Route path="/admin/reviews" element={<AdminReviews />} />
+                    <Route path="/admin/contact" element={<AdminContact />} />
                     <Route path="/admin/users" element={<AdminUsers />} />
                 </Route>
                 <Route path="/companyadmin/login" element={<CompanyLogin />} />

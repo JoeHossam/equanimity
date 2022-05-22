@@ -985,7 +985,7 @@ const Reviews = ({ setModal, selectedIns, setRe }) => {
     );
 };
 
-const Purchases = ({ insurances }) => {
+const Purchases = () => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
@@ -997,16 +997,7 @@ const Purchases = ({ insurances }) => {
                 const res = await axios.get(`${api_url}payment/company`, {
                     withCredentials: true,
                 });
-                setData(
-                    res.data.payments.map((item) => {
-                        return {
-                            ...item,
-                            insurance: insurances.find(
-                                (item2) => item2._id === item.insuranceId
-                            ),
-                        };
-                    })
-                );
+                setData(res.data.payments);
                 setLoading(false);
             } catch (error) {
                 console.log(error.response);
@@ -1052,7 +1043,7 @@ const Purchases = ({ insurances }) => {
                                           )
                                       }
                                   >
-                                      {row.insurance.title}
+                                      {row.insuranceName}
                                   </TableCell>
                                   <TableCell align="right">
                                       {row.phone}

@@ -6,6 +6,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import {
+    Box,
     Divider,
     Slide,
     Table,
@@ -13,6 +14,7 @@ import {
     TableCell,
     TableRow,
 } from '@mui/material';
+import { Close } from '@mui/icons-material';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -22,9 +24,11 @@ const comps = [
     'title',
     'category',
     'createdBy',
-    'price',
+    'basePrice',
     'rating',
     'reviewCount',
+    'baseFeatures',
+    'features',
 ];
 
 export default function CompareMenu({
@@ -55,6 +59,7 @@ export default function CompareMenu({
             <Dialog
                 open={openCompare}
                 onClose={handleClose}
+                fullScreen
                 TransitionComponent={Transition}
                 scroll={'paper'}
                 sx={{
@@ -73,15 +78,21 @@ export default function CompareMenu({
                         }}
                     >
                         <div>Compare</div>
-                        <Button
-                            onClick={() => {
-                                setComparing1({});
-                                setComparing2({});
-                                setShowError({});
-                            }}
-                        >
-                            Clear all
-                        </Button>
+                        <Box>
+                            <Button
+                                sx={{ margin: '0 1rem' }}
+                                onClick={() => {
+                                    setComparing1({});
+                                    setComparing2({});
+                                    setShowError({});
+                                }}
+                            >
+                                Clear all
+                            </Button>
+                            <Button onClick={handleClose}>
+                                <Close />
+                            </Button>
+                        </Box>
                     </div>
                 </DialogTitle>
                 <DialogContent dividers={true}>
@@ -157,7 +168,32 @@ export default function CompareMenu({
                                             <Divider />
                                             <TableCell>
                                                 <div>
-                                                    {half1}
+                                                    {!Array.isArray(half1)
+                                                        ? half1
+                                                        : half1.length === 0
+                                                        ? '-'
+                                                        : half1.map((item) => {
+                                                              if (
+                                                                  typeof item ===
+                                                                  'string'
+                                                              ) {
+                                                                  return (
+                                                                      <li>
+                                                                          {item}
+                                                                      </li>
+                                                                  );
+                                                              }
+                                                              return (
+                                                                  <li>
+                                                                      {
+                                                                          item.name
+                                                                      }
+                                                                      {item.price
+                                                                          ? ` - ${item.price} EGP`
+                                                                          : ''}
+                                                                  </li>
+                                                              );
+                                                          })}
                                                     {Object.keys(comparing1)
                                                         .length !== 0 &&
                                                     item === 'title' ? (
@@ -181,7 +217,32 @@ export default function CompareMenu({
                                             <Divider />
                                             <TableCell>
                                                 <div>
-                                                    {half2}
+                                                    {!Array.isArray(half2)
+                                                        ? half2
+                                                        : half2.length === 0
+                                                        ? '-'
+                                                        : half2.map((item) => {
+                                                              if (
+                                                                  typeof item ===
+                                                                  'string'
+                                                              ) {
+                                                                  return (
+                                                                      <li>
+                                                                          {item}
+                                                                      </li>
+                                                                  );
+                                                              }
+                                                              return (
+                                                                  <li>
+                                                                      {
+                                                                          item.name
+                                                                      }
+                                                                      {item.price
+                                                                          ? ` - ${item.price} EGP`
+                                                                          : ''}
+                                                                  </li>
+                                                              );
+                                                          })}
                                                     {Object.keys(comparing2)
                                                         .length !== 0 &&
                                                     item === 'title' ? (
@@ -209,9 +270,6 @@ export default function CompareMenu({
                         </Table>
                     </DialogContentText>
                 </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose}>Close</Button>
-                </DialogActions>
             </Dialog>
         </div>
     );

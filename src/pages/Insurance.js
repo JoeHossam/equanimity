@@ -25,9 +25,6 @@ import {
     DialogContentText,
     DialogActions,
     Slide,
-    AppBar,
-    IconButton,
-    Toolbar,
     Box,
 } from '@mui/material';
 import axios from 'axios';
@@ -38,13 +35,13 @@ import { getData, api_url } from '../getData.js';
 import MuiAccordion from '@mui/material/Accordion';
 import MuiAccordionSummary from '@mui/material/AccordionSummary';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { styled } from '@mui/material/styles';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
 import { Check, Plus } from 'tabler-icons-react';
 import { createStyles, Button as ButtonMantine } from '@mantine/core';
 import Payment from '../components/Payment';
 import { Close } from '@mui/icons-material';
+import Loading from './Loading.js';
 
 const Accordion = styled((props) => (
     <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -124,6 +121,7 @@ const Insurance = () => {
         type: 'review',
         size: 'md',
     });
+    const [notFound, setNotFound] = useState(false);
     const [favs, setFavs] = useState(0);
 
     useEffect(() => {
@@ -152,13 +150,18 @@ const Insurance = () => {
     useEffect(() => {
         setLoading(true);
         const fetchData = async () => {
-            const insRes = await fetch(`${api_url}insurance/${id}`);
-            const insData = await insRes.json();
-            setInsuranceData(insData);
+            try {
+                const insRes = await axios.get(`${api_url}insurance/${id}`);
+                if (Object.keys(insRes.data.insurance).length === 0) {
+                    setNotFound(true);
+                }
+                setInsuranceData(insRes.data);
 
-            const revRes = await fetch(`${api_url}review/${id}`);
-            const revData = await revRes.json();
-            setReviewData(revData);
+                const revRes = await axios.get(`${api_url}review/${id}`);
+                setReviewData(revRes.data);
+            } catch (error) {
+                setNotFound(true);
+            }
 
             setLoading(false);
         };
@@ -166,7 +169,11 @@ const Insurance = () => {
     }, [id]);
 
     useEffect(() => {
-        if (insuranceData.length === 0 || loading) {
+        if (loading) {
+            return;
+        }
+        if (notFound) {
+            setCompanyLoading(false);
             return;
         }
         const fetchCompanyData = async () => {
@@ -204,8 +211,20 @@ const Insurance = () => {
         }
     };
 
+    if (notFound) {
+        return (
+            <Box textAlign={'center'}>
+                <h2>404 Not Found</h2>
+                <p>
+                    There is no insurance here, maybe the URL is incorrect or
+                    the insurance has been deleted.
+                </p>
+            </Box>
+        );
+    }
+
     if (loading || companyLoading || userLoading) {
-        return <h2>loading..</h2>;
+        return <Loading />;
     }
 
     // Insurance
@@ -214,7 +233,7 @@ const Insurance = () => {
         category,
         createdBy,
         basePrice,
-        rating, //add rating component mui
+        rating,
         reviewCount,
         description,
         features,
@@ -225,6 +244,7 @@ const Insurance = () => {
 
     // Get Reviews
     const { reviews } = reviewData;
+
     return (
         <main className={classes.wrapper}>
             {/* title, rating, and company name */}
@@ -399,7 +419,10 @@ const Insurance = () => {
                                                   >
                                                       <div>- {item.name}</div>
                                                       <div>
-                                                          {item.price} EGP
+                                                          {item.price.toLocaleString(
+                                                              'en-US'
+                                                          )}{' '}
+                                                          EGP
                                                       </div>
                                                   </Typography>
                                               </li>
@@ -425,7 +448,7 @@ const Insurance = () => {
                         }}
                     >
                         <Typography variant="h5">
-                            Price: {basePrice} EGP
+                            Price: {basePrice.toLocaleString('en-US')} EGP
                         </Typography>
 
                         <ButtonMantine
@@ -483,6 +506,8 @@ const Insurance = () => {
                     />
                 ) : (
                     <PaymentDialog
+                        title={title}
+                        companyName={company}
                         category={category}
                         selectedList={selectedList}
                         setSelectedList={setSelectedList}
@@ -745,7 +770,8 @@ const LeaveReview = ({ insuranceId, setReviewData, setDialog, dialog }) => {
 
 const PaymentDialog = ({
     selectedList,
-    setSelectedList,
+    title,
+    companyName,
     basePrice,
     setDialog,
     dialog,
@@ -803,6 +829,8 @@ const PaymentDialog = ({
                 {
                     insuranceId: insuranceId,
                     userId: user._id,
+                    insuranceName: title,
+                    companyName,
                     companyId: companyId,
                     totalPrice: total,
                     phone: user.phone,
@@ -889,13 +917,16 @@ const PaymentDialog = ({
                                                 Base Services total
                                             </TableCell>
                                             <TableCell align="right">
-                                                {price.toFixed(2)}
+                                                {price.toLocaleString('en-US')}
                                             </TableCell>
                                             <TableCell
                                                 align="right"
                                                 sx={{ color: 'green' }}
                                             >
-                                                {'+' + price.toFixed(2)}
+                                                {'+' +
+                                                    price.toLocaleString(
+                                                        'en-US'
+                                                    )}
                                             </TableCell>
                                         </TableRow>
                                         <TableRow>
@@ -952,7 +983,9 @@ const PaymentDialog = ({
                                                     {row.name}
                                                 </TableCell>
                                                 <TableCell align="right">
-                                                    {row.price.toFixed(2)}
+                                                    {row.price.toLocaleString(
+                                                        'en-US'
+                                                    )}
                                                 </TableCell>
                                                 <TableCell
                                                     align="right"
@@ -960,8 +993,8 @@ const PaymentDialog = ({
                                                 >
                                                     {row.checked &&
                                                         '+' +
-                                                            row.price.toFixed(
-                                                                2
+                                                            row.price.toLocaleString(
+                                                                'en-US'
                                                             )}
                                                 </TableCell>
                                             </TableRow>
@@ -976,7 +1009,10 @@ const PaymentDialog = ({
                                             <TableCell></TableCell>
                                             <TableCell align="right">
                                                 <Typography variant="h5">
-                                                    {total} EGP
+                                                    {total.toLocaleString(
+                                                        'en-US'
+                                                    )}{' '}
+                                                    EGP
                                                 </Typography>
                                             </TableCell>
                                         </TableRow>

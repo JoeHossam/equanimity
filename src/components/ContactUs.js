@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Paper,
     Text,
@@ -11,7 +11,9 @@ import {
     Title,
 } from '@mantine/core';
 import { ContactIconsList } from '../ContactIcons/ContactIcons.tsx';
-import { Typography } from '@mui/material';
+import { Alert, Snackbar, Typography } from '@mui/material';
+import axios from 'axios';
+import { api_url, useGlobalContext } from '../context';
 // import bg from './bg.svg';
 const bg = 'https://ui.mantine.dev/_next/static/media/bg.daf91204.svg';
 
@@ -121,6 +123,54 @@ const useStyles = createStyles((theme) => {
 export function GetInTouch() {
     const { classes } = useStyles();
 
+    const { user, isLoggedIn } = useGlobalContext();
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [subject, setSubject] = useState('');
+    const [msg, setMsg] = useState('');
+
+    const [snack, setSnack] = useState({ isOpen: false, msg: '', type: '' });
+
+    useEffect(() => {
+        if (isLoggedIn) {
+            setName(user.name);
+            setEmail(user.email);
+        }
+    }, []);
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (name === '' || email === '' || subject === '' || msg === '')
+            return setSnack({
+                isOpen: true,
+                type: 'error',
+                msg: 'Please fill all the fields',
+            });
+        try {
+            await axios.post(
+                `${api_url}contact`,
+                { name, email, subject, msg },
+                { withCredentials: true }
+            );
+            setName('');
+            setEmail('');
+            setSubject('');
+            setMsg('');
+            setSnack({
+                isOpen: true,
+                type: 'success',
+                msg: 'Sent Successfully',
+            });
+        } catch (error) {
+            setSnack({
+                isOpen: true,
+                type: 'error',
+                msg: 'An error occured. Please try again later',
+            });
+            console.log('contactUs => ', error.response);
+        }
+    };
+
     return (
         <div className={classes.evenBiggerWrapper}>
             <Title
@@ -148,10 +198,7 @@ export function GetInTouch() {
                             <ContactIconsList variant="white" />
                         </div>
 
-                        <form
-                            className={classes.form}
-                            onSubmit={(event) => event.preventDefault()}
-                        >
+                        <form className={classes.form} onSubmit={handleSubmit}>
                             <Text
                                 size="lg"
                                 weight={700}
@@ -167,10 +214,18 @@ export function GetInTouch() {
                                 >
                                     <TextInput
                                         label="Your name"
+                                        value={name}
+                                        onChange={(e) =>
+                                            setName(e.target.value)
+                                        }
                                         placeholder="Your name"
                                     />
                                     <TextInput
                                         label="Your email"
+                                        value={email}
+                                        onChange={(e) =>
+                                            setEmail(e.target.value)
+                                        }
                                         placeholder="hello@mantine.dev"
                                         required
                                     />
@@ -180,6 +235,8 @@ export function GetInTouch() {
                                     mt="md"
                                     label="Subject"
                                     placeholder="Subject"
+                                    value={subject}
+                                    onChange={(e) => setSubject(e.target.value)}
                                     required
                                 />
 
@@ -187,6 +244,8 @@ export function GetInTouch() {
                                     mt="md"
                                     label="Your message"
                                     placeholder="Please include all relevant information"
+                                    value={msg}
+                                    onChange={(e) => setMsg(e.target.value)}
                                     minRows={3}
                                 />
 
@@ -203,6 +262,19 @@ export function GetInTouch() {
                     </div>
                 </Paper>
             </div>
+            <Snackbar
+                open={snack.isOpen}
+                autoHideDuration={6000}
+                onClose={() => setSnack({ ...snack, isOpen: false })}
+            >
+                <Alert
+                    onClose={() => setSnack({ ...snack, isOpen: false })}
+                    severity={snack.type}
+                    sx={{ width: '100%' }}
+                >
+                    {snack.msg}
+                </Alert>
+            </Snackbar>
         </div>
     );
 }

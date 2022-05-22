@@ -129,11 +129,6 @@ p {
 .btn:hover {
     background-color: #444;
 }
-
-.insurance-list-main {
-    display: block;
-}
-
 @media screen and (min-width: 800px) {
     .nav-center {
         display: grid;
@@ -171,10 +166,6 @@ p {
         text-transform: capitalize;
         letter-spacing: 1px;
         width: 10rem;
-    }
-    .insurance-list-main {
-        display: grid;
-        grid-template-columns: min-content auto;
     }
 }
 

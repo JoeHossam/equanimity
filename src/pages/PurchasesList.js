@@ -30,106 +30,70 @@ const InsuranceSkeleton = () => {
     );
 };
 
-const Insurance = ({ insuranceId, companies, totalPrice, features }) => {
-    const [loading, setLoading] = useState(true);
-    const [insurance, setInsurance] = useState({});
-    const [company, setCompany] = useState({});
+const Insurance = ({
+    companyName,
+    insuranceName,
+    insuranceId,
+    companyId,
+    totalPrice,
+    features,
+}) => {
     const navigate = useNavigate();
-
-    useEffect(() => {
-        setLoading(true);
-        const fetchInsurance = async () => {
-            try {
-                const res = await axios.get(
-                    `${api_url}insurance/${insuranceId}`
-                );
-                setCompany(
-                    companies.find(
-                        (comp) => comp._id === res.data.insurance.createdBy
-                    )
-                );
-                setInsurance(res.data.insurance);
-                setLoading(false);
-            } catch (error) {
-                console.log(error.response);
-            }
-        };
-        fetchInsurance();
-    }, []);
-
-    const {
-        _id,
-        title,
-        category,
-        description,
-        basePrice: price,
-        createdBy,
-    } = insurance;
     return (
         <div>
-            {loading ? (
-                <InsuranceSkeleton />
-            ) : (
-                <Card>
-                    <CardContent>
-                        <Typography
-                            gutterBottom
-                            variant="h5"
-                            onClick={() => navigate(`/insurance/${_id}`)}
-                            sx={{ cursor: 'pointer' }}
-                            component="div"
-                        >
-                            {/* <Link to={`/insurance/${_id}`}> */}
-                            {title}
-                        </Typography>
-                        <Typography
-                            variant="subtitle1"
-                            sx={{ cursor: 'pointer' }}
-                            onClick={() => navigate(`/company/${createdBy}`)}
-                        >
-                            {/* <Link to={`/company/${createdBy}`}> */}
-                            {company.name}
-                        </Typography>
-                        <Divider />
-                        {features.length !== 0 && (
-                            <>
-                                <Typography
-                                    variant="subtitle2"
-                                    sx={{ marginTop: '0.5rem' }}
-                                >
-                                    Additional Coverages
-                                </Typography>
-                                <Typography
-                                    variant="subtitle2"
-                                    sx={{ marginTop: '0.5rem' }}
-                                >
-                                    {features.map((item, index) => {
-                                        return (
-                                            <li key={index}>
-                                                {item.name} -{' '}
-                                                {item.price.toFixed(2)} EGP
-                                            </li>
-                                        );
-                                    })}
-                                </Typography>
-                            </>
-                        )}
-                        <Divider />
-                        <Typography
-                            variant="subtitle2"
-                            sx={{ marginTop: '0.5rem' }}
-                        >
-                            Total {totalPrice} EGP
-                        </Typography>
-                    </CardContent>
+            <Card>
+                <CardContent>
+                    <Typography
+                        gutterBottom
+                        variant="h5"
+                        onClick={() => navigate(`/insurance/${insuranceId}`)}
+                        sx={{ cursor: 'pointer' }}
+                        component="div"
+                    >
+                        {insuranceName}
+                    </Typography>
+                    <Typography
+                        variant="subtitle1"
+                        sx={{ cursor: 'pointer' }}
+                        onClick={() => navigate(`/company/${companyId}`)}
+                    >
+                        {/* <Link to={`/company/${createdBy}`}> */}
+                        {companyName}
+                    </Typography>
                     <Divider />
-                    {/* <CardActions>
-                        <Button size="small">
-                            <Link to={`/insurance/${_id}`}>See More</Link>
-                        </Button>
-                    </CardActions> */}
-                </Card>
-            )}
+                    {features.length !== 0 && (
+                        <>
+                            <Typography
+                                variant="subtitle2"
+                                sx={{ marginTop: '0.5rem' }}
+                            >
+                                Additional Coverages
+                            </Typography>
+                            <Typography
+                                variant="subtitle2"
+                                sx={{ marginTop: '0.5rem' }}
+                            >
+                                {features.map((item, index) => {
+                                    return (
+                                        <li key={index}>
+                                            {item.name} -{' '}
+                                            {item.price.toFixed(2)} EGP
+                                        </li>
+                                    );
+                                })}
+                            </Typography>
+                        </>
+                    )}
+                    <Divider />
+                    <Typography
+                        variant="subtitle2"
+                        sx={{ marginTop: '0.5rem' }}
+                    >
+                        Total {totalPrice} EGP
+                    </Typography>
+                </CardContent>
+                <Divider />
+            </Card>
         </div>
     );
 };

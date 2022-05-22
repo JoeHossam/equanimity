@@ -5,11 +5,12 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { Checkbox, Divider, Skeleton } from '@mui/material';
+import { Checkbox, Divider, Skeleton, Rating, Box } from '@mui/material';
 import { Check, Plus } from 'tabler-icons-react';
 import { api_url } from '../getData.js';
 import axios from 'axios';
 import { useGlobalContext } from '../context';
+import { Button as MantineButton } from '@mantine/core';
 
 const InsuranceSkeleton = () => {
     return (
@@ -24,7 +25,7 @@ const InsuranceSkeleton = () => {
 };
 
 const SingleInsurance = (props) => {
-    const { _id, title, createdBy, category, basePrice, description } =
+    const { _id, title, createdBy, category, basePrice, rating, reviewCount } =
         props.insurance;
     const {
         comparing1,
@@ -142,7 +143,11 @@ const SingleInsurance = (props) => {
                                 <Typography
                                     gutterBottom
                                     variant="subtitle1"
-                                    sx={{ lineHeight: 'auto' }}
+                                    sx={{
+                                        lineHeight: 'inherit',
+                                        marginBottom: 0,
+                                        fontFamily: 'Quicksand',
+                                    }}
                                 >
                                     <Link to={`/company/${createdBy}`}>
                                         {company.name}
@@ -153,12 +158,10 @@ const SingleInsurance = (props) => {
                                 style={{
                                     display: 'flex',
                                     flexDirection: 'column',
-                                    alignContent: 'center',
+                                    alignItems: 'flex-end',
+                                    justifyContent: 'space-between',
                                 }}
                             >
-                                <Typography variant="caption">
-                                    {category}
-                                </Typography>
                                 <Checkbox
                                     disableRipple
                                     sx={{ padding: 0 }}
@@ -192,11 +195,33 @@ const SingleInsurance = (props) => {
                                     }
                                     onClick={toggleFavourite}
                                 />
+                                <Typography variant="caption">
+                                    {category}
+                                </Typography>
                             </div>
                         </Typography>
-
-                        <Divider />
-
+                        <Divider sx={{ margin: '0.5rem 0' }} />
+                        <Box
+                            sx={{
+                                width: '100%',
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                            }}
+                        >
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                }}
+                            >
+                                {rating.toFixed(2)}
+                                <div style={{ fontSize: '12px' }}>
+                                    {reviewCount} reviews
+                                </div>
+                            </div>
+                            <Rating readOnly value={rating} precision={0.5} />
+                        </Box>
                         <Typography
                             variant="subtitle2"
                             sx={{ marginTop: '0.5rem' }}
@@ -206,10 +231,28 @@ const SingleInsurance = (props) => {
                     </CardContent>
                     <Divider />
                     <CardActions>
-                        <Button size="small">
-                            <Link to={`/insurance/${_id}`}>See More</Link>
+                        <Button
+                            size="small"
+                            sx={{
+                                fontSize: '12px !important',
+                                lineHeight: 'inherit',
+                            }}
+                        >
+                            <Link
+                                style={{ fontSize: '12px' }}
+                                to={`/insurance/${_id}`}
+                            >
+                                See More
+                            </Link>
                         </Button>
-                        <Button onClick={addToCompare} size="small">
+                        <Button
+                            onClick={addToCompare}
+                            sx={{
+                                fontSize: '12px !important',
+                                lineHeight: 'inherit',
+                            }}
+                            size="small"
+                        >
                             Add to Compare
                         </Button>
                     </CardActions>

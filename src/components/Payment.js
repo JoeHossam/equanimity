@@ -39,7 +39,7 @@ export default function Demo({
     let steps = [];
 
     switch (type) {
-        case 'Life Insurance':
+        case 'Medical Insurance':
             steps = [
                 {
                     label: 'enter your age',

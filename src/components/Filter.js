@@ -5,7 +5,6 @@ import {
     Checkbox,
     FormControl,
     InputLabel,
-    ListItemIcon,
     MenuItem,
     Rating,
     Select,
@@ -77,6 +76,7 @@ const Filter = ({ urlCategory, search }) => {
     }, [fixer]);
 
     useEffect(() => {
+        if (search === '') return;
         applyQuery();
     }, [search]);
 
@@ -85,8 +85,8 @@ const Filter = ({ urlCategory, search }) => {
             sx={{
                 maxWidth: '500px',
                 minWidth: '285px',
-                padding: '1rem',
-                textAlign: 'center',
+                gridColumnStart: 1,
+                gridColumnEnd: 4,
                 ['@media (max-width:880px)']: {
                     margin: 'auto',
                 },
