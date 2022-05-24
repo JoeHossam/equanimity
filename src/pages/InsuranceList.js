@@ -80,7 +80,7 @@ const InsuranceList = () => {
             setInsuranceLoading(false);
         };
         fetchData();
-    }, [query, page]);
+    }, [query, page, search]);
 
     useEffect(() => {
         if (companies.length === 0) return;

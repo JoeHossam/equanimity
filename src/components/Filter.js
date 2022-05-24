@@ -37,7 +37,7 @@ const Filter = ({ urlCategory, search }) => {
     const [addCategories, setAddCategories] = useState(false);
 
     const applyQuery = () => {
-        let query = `?title=${search}`;
+        let query = `title=${search}`;
         const priceQuery = `basePrice>${priceRange[0]},basePrice<${priceRange[1]}`;
         const ratingQuery = `rating>=${rating}`;
         const companiesQuery = `company=${selectedCompanies
@@ -64,7 +64,7 @@ const Filter = ({ urlCategory, search }) => {
 
     const [fixer, setFixer] = useState(true);
     useEffect(() => {
-        if (!urlCategory) return;
+        if (!urlCategory) return setFixer(false);
         setAddCategories(true);
         setSelectedCategories([urlCategory]);
         setFixer(false);
@@ -76,7 +76,7 @@ const Filter = ({ urlCategory, search }) => {
     }, [fixer]);
 
     useEffect(() => {
-        if (search === '') return;
+        if (fixer) return;
         applyQuery();
     }, [search]);
 
