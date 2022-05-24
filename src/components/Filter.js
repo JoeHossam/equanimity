@@ -37,7 +37,7 @@ const Filter = ({ urlCategory, search }) => {
     const [addCategories, setAddCategories] = useState(false);
 
     const applyQuery = () => {
-        let query = `?page=${page}&title=${search}`;
+        let query = `?title=${search}`;
         const priceQuery = `basePrice>${priceRange[0]},basePrice<${priceRange[1]}`;
         const ratingQuery = `rating>=${rating}`;
         const companiesQuery = `company=${selectedCompanies
@@ -307,16 +307,22 @@ const Filter = ({ urlCategory, search }) => {
                             Alphabetic
                         </MenuItem>
                         <MenuItem value={'basePrice'}>
-                            Price <ArrowUpwardIcon fontSize="1px" />
-                        </MenuItem>
-                        <MenuItem value={'-basePrice'}>
                             Price <ArrowDownwardIcon fontSize="1px" />
                         </MenuItem>
+                        <MenuItem value={'-basePrice'}>
+                            Price <ArrowUpwardIcon fontSize="1px" />
+                        </MenuItem>
                         <MenuItem value={'rating'}>
-                            Rating <ArrowUpwardIcon fontSize="1px" />
+                            Rating <ArrowDownwardIcon fontSize="1px" />
                         </MenuItem>
                         <MenuItem value={'-rating'}>
-                            Rating <ArrowDownwardIcon fontSize="1px" />
+                            Rating <ArrowUpwardIcon fontSize="1px" />
+                        </MenuItem>
+                        <MenuItem value={'reviewCount'}>
+                            Review Count <ArrowDownwardIcon fontSize="1px" />
+                        </MenuItem>
+                        <MenuItem value={'-reviewCount'}>
+                            Review Count <ArrowUpwardIcon fontSize="1px" />
                         </MenuItem>
                         <MenuItem value={'createdAt'}>Newest</MenuItem>
                         <MenuItem value={'-createdAt'}>Oldest</MenuItem>

@@ -47,7 +47,9 @@ const InsuranceList = () => {
         setInsuranceLoading(true);
         const fetchData = async () => {
             if (!urlCategory) {
-                const res = await fetch(`${api_url}insurance/${query}`);
+                const res = await fetch(
+                    `${api_url}insurance?${query}&limit=9&page=${page}`
+                );
                 const { insurances, count } = await res.json();
                 setTotalPages(Math.ceil(count / 10));
                 setData(insurances);
@@ -69,14 +71,16 @@ const InsuranceList = () => {
         setInsuranceLoading(true);
         if (query === ``) return;
         const fetchData = async () => {
-            const res = await fetch(`${api_url}insurance?${query}`);
+            const res = await fetch(
+                `${api_url}insurance?${query}&limit=9&page=${page}`
+            );
             const { insurances, count } = await res.json();
             setTotalPages(Math.ceil(count / 10));
             setData(insurances);
             setInsuranceLoading(false);
         };
         fetchData();
-    }, [query]);
+    }, [query, page]);
 
     useEffect(() => {
         if (companies.length === 0) return;
@@ -212,11 +216,10 @@ const InsuranceList = () => {
                                     <Pagination
                                         count={totalPages}
                                         page={page}
-                                        variant="outlined"
+                                        showFirstButton
+                                        showLastButton
                                         shape="rounded"
-                                        onChange={(e) =>
-                                            setPage(e.target.value)
-                                        }
+                                        onChange={(e, v) => setPage(v)}
                                         sx={{
                                             '& .MuiPagination-ul': {
                                                 justifyContent: 'center',

@@ -195,7 +195,7 @@ const SingleInsurance = (props) => {
                                     }
                                     onClick={toggleFavourite}
                                 />
-                                <Typography variant="caption">
+                                <Typography variant="caption" align="right">
                                     {category}
                                 </Typography>
                             </div>

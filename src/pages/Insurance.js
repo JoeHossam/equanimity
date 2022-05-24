@@ -361,7 +361,11 @@ const Insurance = () => {
                             dangerouslySetInnerHTML={{
                                 __html: description,
                             }}
-                            style={{ whiteSpace: 'pre' }}
+                            style={{
+                                whiteSpace: 'pre',
+                                margin: '16px',
+                                padding: 0,
+                            }}
                         ></Typography>
                     </AccordionDetails>
                 </Accordion>
