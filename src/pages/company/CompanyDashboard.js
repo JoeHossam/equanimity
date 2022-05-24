@@ -40,72 +40,6 @@ import CloseIcon from '@mui/icons-material/Close';
 import { RichTextEditor } from '@mantine/rte';
 import { useNavigate } from 'react-router-dom';
 
-const rows = [
-    {
-        id: 1,
-        _id: 5,
-        title: 'insurance501',
-        category: 'life',
-        price: 18000,
-        rating: 3.8,
-        reviewCount: 9,
-    },
-    {
-        id: 2,
-        _id: 6,
-        title: 'insurance503',
-        category: 'life',
-        price: 23892,
-        rating: 4.8,
-        reviewCount: 1,
-    },
-    {
-        id: 4,
-        _id: 2,
-        title: 'ins ya bro',
-        category: 'motor',
-        price: 18000,
-        rating: 2.8,
-        reviewCount: 2882,
-    },
-    {
-        id: 9,
-        _id: 2323,
-        title: 'vroom vroom',
-        category: 'motor',
-        price: 2,
-        rating: 5,
-        reviewCount: 9999,
-    },
-    {
-        id: 12312,
-        _id: 2323,
-        title: 'vroom vroom',
-        category: 'motor',
-        price: 2,
-        rating: 5,
-        reviewCount: 9999,
-    },
-    {
-        id: 912354,
-        _id: 2323,
-        title: 'vroom vroom',
-        category: 'motor',
-        price: 2,
-        rating: 5,
-        reviewCount: 9999,
-    },
-    {
-        id: 965334,
-        _id: 2323,
-        title: 'vroom vroooooooooooom',
-        category: 'motor',
-        price: 2,
-        rating: 5,
-        reviewCount: 9999,
-    },
-];
-
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -142,12 +76,6 @@ const CompanyDashboard = () => {
     }, [re]);
 
     const columns = [
-        {
-            field: '_id',
-            headerName: 'ID',
-            width: 70,
-            flex: 1,
-        },
         {
             field: 'title',
             headerName: 'Insurance Title',
@@ -205,6 +133,12 @@ const CompanyDashboard = () => {
             type: 'boolean',
             headerAlign: 'center',
             align: 'center',
+            width: 150,
+            flex: 1,
+        },
+        {
+            field: 'status',
+            headerName: 'Status',
             width: 150,
             flex: 1,
         },
@@ -804,7 +738,7 @@ const Hide = ({ setModal, selectedIns, setRe }) => {
         const { _id } = selectedIns;
         try {
             await axios.patch(
-                `${api_url}insurance/${_id}`,
+                `${api_url}insurance/${_id}/toggleHide`,
                 {
                     hidden: !isHidden,
                 },

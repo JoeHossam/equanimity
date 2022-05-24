@@ -37,21 +37,22 @@ const AdminReviews = () => {
                 const res3 = await axios.get(`${api_url}user`, {
                     withCredentials: true,
                 });
-                console.log(res3);
                 setReviews(
                     revs.map((item) => {
                         return {
                             ...item,
-                            insuranceName: res2.data.insurances.find(
-                                (item2) => item2._id === item.insuranceId
-                            ),
+                            insuranceName:
+                                res2.data.insurances.find(
+                                    (item2) => item2._id === item.insuranceId
+                                ) || 'deleted insurance',
                             userName:
                                 res3.data.users.find(
                                     (item2) => item2._id === item.userId
                                 ) ||
                                 res3.data.authUsers.find(
                                     (item2) => item2._id === item.userId
-                                ),
+                                ) ||
+                                'Deleted user',
                         };
                     })
                 );
@@ -123,7 +124,6 @@ const AdminReviews = () => {
                 <DialogContentText component={'div'}>
                     <ul style={{}}>
                         {reviews.map((item) => {
-                            console.log(item.insuranceName);
                             return (
                                 <>
                                     <li
@@ -138,7 +138,7 @@ const AdminReviews = () => {
                                             sx={{ alignItems: 'flex-start' }}
                                             avatar={
                                                 <Avatar
-                                                    // alt={item.userName}
+                                                    alt={item.userName.name}
                                                     src={item.userName.img}
                                                 />
                                             }

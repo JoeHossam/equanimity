@@ -3,10 +3,12 @@ import { Typography } from '@mui/material';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { api_url } from '../context';
+import { useNavigate } from 'react-router-dom';
 
 const HomePartners = () => {
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState({});
+    const navigate = useNavigate();
     useEffect(() => {
         setLoading(true);
         const fetchData = async () => {
@@ -55,6 +57,7 @@ const HomePartners = () => {
                 {data.map((item) => {
                     return (
                         <Paper
+                            onClick={() => navigate(`/company/${item._id}`)}
                             sx={(theme) => ({
                                 textAlign: 'center',
                                 justifyContent: 'center',
@@ -63,6 +66,7 @@ const HomePartners = () => {
                                 width: '8rem',
                                 height: '8rem',
                                 margin: '0.25rem',
+                                cursor: 'pointer',
                                 [theme.fn.smallerThan('sm')]: {
                                     width: '6rem',
                                     height: '6rem',
@@ -73,7 +77,7 @@ const HomePartners = () => {
                                 '&:hover': {
                                     boxShadow: `${theme.shadows.md} !important`,
                                     transform: 'scale(1.05)',
-                                    cursor: 'default',
+                                    cursor: 'pointer',
                                 },
                             })}
                         >

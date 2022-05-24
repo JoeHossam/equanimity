@@ -15,8 +15,6 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { api_url } from '../../context';
 import Loading from '../Loading';
-
-import { TextInput, Textarea, SimpleGrid, createStyles } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -25,13 +23,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const AdminPayments = () => {
     const [loading, setLoading] = useState(true);
-    const [selectedCat, setSelectedCat] = useState({});
     const [data, setData] = useState({});
-    const [modal, setModal] = useState({
-        open: false,
-        type: 'create',
-        size: 'lg',
-    });
     const navigate = useNavigate();
     useEffect(() => {
         setLoading(true);
@@ -58,7 +50,7 @@ const AdminPayments = () => {
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell colSpan={6} align="center">
+                            <TableCell colSpan={7} align="center">
                                 <Typography
                                     variant="h4"
                                     sx={{ textAlign: 'center' }}
@@ -75,7 +67,8 @@ const AdminPayments = () => {
                                 Customer's Phone
                             </TableCell>
                             <TableCell align="center">Features</TableCell>
-                            <TableCell align="center">Total Price</TableCell>
+                            <TableCell align="right">Total Price</TableCell>
+                            <TableCell align="right">Date and Time</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -87,25 +80,25 @@ const AdminPayments = () => {
                                         sx={{ cursor: 'pointer' }}
                                         onClick={() =>
                                             navigate(
-                                                `/insurance/${item.insurance[0]._id}`
+                                                `/insurance/${item.insurnaceId}`
                                             )
                                         }
                                     >
-                                        {item.insurance[0].title}
+                                        {item.insuranceName}
                                     </TableCell>
                                     <TableCell
                                         align="center"
                                         sx={{ cursor: 'pointer' }}
                                         onClick={() =>
                                             navigate(
-                                                `/company/${item.company[0]._id}`
+                                                `/company/${item.companyId}`
                                             )
                                         }
                                     >
-                                        {item.company[0].name}
+                                        {item.companyName}
                                     </TableCell>
                                     <TableCell align="center">
-                                        {item.user[0].name}
+                                        {item.user[0].name || 'Deleted Account'}
                                     </TableCell>
                                     <TableCell align="center">
                                         {item.phone}
@@ -125,13 +118,19 @@ const AdminPayments = () => {
                                                   );
                                               })}
                                     </TableCell>
-                                    <TableCell align="center">
+                                    <TableCell align="right">
                                         {item.totalPrice.toLocaleString(
                                             'en-US'
                                         )}{' '}
                                         EGP
                                     </TableCell>
-                                    <TableCell align="center"></TableCell>
+                                    <TableCell align="right">
+                                        {item.createdAt.split('T')[0]}
+                                        <br />
+                                        {item.createdAt
+                                            .split('T')[1]
+                                            .slice(0, -5)}
+                                    </TableCell>
                                 </TableRow>
                             );
                         })}

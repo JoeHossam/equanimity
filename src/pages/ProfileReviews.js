@@ -1,7 +1,10 @@
 import {
     Alert,
+    Box,
     Button,
     ButtonGroup,
+    Card,
+    CardContent,
     CardHeader,
     Dialog,
     DialogActions,
@@ -52,16 +55,20 @@ const ProfileReviews = () => {
             return;
         }
         const getInsurances = async () => {
-            let list = [];
-            for (let index = 0; index < reviews.length; index++) {
-                const insData = await axios.get(
-                    `${api_url}insurance/${reviews[index].insuranceId}`
-                );
-                const { title, _id } = insData.data.insurance;
-                list.push({ title, _id });
-            }
+            try {
+                let list = [];
+                for (let index = 0; index < reviews.length; index++) {
+                    const insData = await axios.get(
+                        `${api_url}insurance/${reviews[index].insuranceId}`
+                    );
+                    const { title, _id } = insData.data.insurance;
+                    list.push({ title, _id });
+                }
 
-            setInsurances(list);
+                setInsurances(list);
+            } catch (error) {
+                console.log(error);
+            }
             setLoading(false);
         };
         getInsurances();
@@ -179,6 +186,11 @@ const Reviews = ({ reviews, setReviews, insurances }) => {
                 }}
             >
                 {reviews.map((item) => {
+                    if (
+                        !insurances.find((ins) => ins._id === item.insuranceId)
+                    ) {
+                        return <NotFoundInsurance />;
+                    }
                     return (
                         <>
                             <li
@@ -353,6 +365,32 @@ const Reviews = ({ reviews, setReviews, insurances }) => {
                 </Alert>
             </Snackbar>
         </div>
+    );
+};
+
+const NotFoundInsurance = () => {
+    return (
+        <Card>
+            <CardContent>
+                <Typography
+                    gutterBottom
+                    variant="h5"
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                    }}
+                    component="div"
+                >
+                    <Box>Review on Disabled Insurance</Box>
+                </Typography>
+                <Divider />
+                <Typography variant="subtitle2">
+                    This insurance may be under update, suspended or hidden by
+                    the company. Please check on it another time.
+                </Typography>
+            </CardContent>
+            <Divider />
+        </Card>
     );
 };
 

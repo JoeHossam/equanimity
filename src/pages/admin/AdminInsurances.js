@@ -75,6 +75,13 @@ const AdminInsurances = () => {
                         selectedIns={selectedIns}
                         setRe={setRe}
                     />
+                ) : modal.type === 'view_all' ? (
+                    <ViewAll
+                        setModal={setModal}
+                        modal={modal}
+                        selectedIns={selectedIns}
+                        setRe={setRe}
+                    />
                 ) : (
                     <SuspendInsurance
                         setModal={setModal}
@@ -474,7 +481,7 @@ const AllInsurances = ({ modal, setModal, setSelectedIns }) => {
                         setModal({
                             ...modal,
                             open: true,
-                            type: 'view',
+                            type: 'view_all',
                             size: 'md',
                         });
                         setSelectedIns(ins);
@@ -587,7 +594,7 @@ const ViewInsurance = ({ setModal, selectedIns, setRe }) => {
             <DialogTitle>{'Insurance'}</DialogTitle>
             <DialogContent dividers>
                 <DialogContentText component={'div'}>
-                    <form onSubmit={handleApprove}>
+                    <form>
                         <div
                             style={{
                                 display: 'grid',
@@ -705,6 +712,185 @@ const ViewInsurance = ({ setModal, selectedIns, setRe }) => {
                 </Button>
                 <Button variant="contained" onClick={handleApprove}>
                     Approve
+                </Button>
+            </DialogActions>
+        </>
+    );
+};
+
+const ViewAll = ({ setModal, selectedIns, setRe }) => {
+    const deleteInsurance = async () => {
+        const { _id } = selectedIns;
+        try {
+            await axios.delete(`${api_url}insurance/${_id}`, {
+                withCredentials: true,
+                data: {
+                    company_id: selectedIns.createdBy,
+                },
+            });
+        } catch (error) {
+            console.log(error.response);
+        }
+        setModal((prev) => {
+            return { ...prev, open: false };
+        });
+        setRe({});
+    };
+
+    const handleSuspend = async () => {
+        const { _id } = selectedIns;
+        try {
+            await axios.patch(
+                `${api_url}insurance/${
+                    selectedIns.status === 'suspended' ? 'unsuspend' : 'suspend'
+                }/${_id}`,
+                {},
+                { withCredentials: true }
+            );
+        } catch (error) {
+            console.log(error.response);
+        }
+        setModal((prev) => {
+            return { ...prev, open: false };
+        });
+        setRe({});
+    };
+    return (
+        <>
+            <DialogTitle>
+                {selectedIns.status === 'approved' &&
+                selectedIns.hidden === false
+                    ? 'Public Insurance'
+                    : 'Private insurance'}
+            </DialogTitle>
+            <DialogContent dividers>
+                <DialogContentText component={'div'}>
+                    <form>
+                        <div
+                            style={{
+                                display: 'grid',
+                                gridTemplateColumns: 'auto auto',
+                                width: '100%',
+                                marginBottom: '1rem',
+                            }}
+                        >
+                            <TextField
+                                fullWidth
+                                label="Title"
+                                value={selectedIns.title}
+                            />
+                            <TextField fullWidth value={selectedIns.category} />
+                        </div>
+                        <TextField
+                            fullWidth
+                            label="Base Price"
+                            type="number"
+                            value={selectedIns.basePrice}
+                            sx={{ marginBottom: '1rem' }}
+                        />
+
+                        <TextField
+                            fullWidth
+                            label="Description"
+                            value={selectedIns.description}
+                            sx={{ marginBottom: '1rem' }}
+                            multiline
+                            minRows={3}
+                        />
+                        <TableContainer component={Paper}>
+                            <Table
+                                sx={{ minWidth: 650, border: '2px solid #eee' }}
+                                aria-label="simple table"
+                            >
+                                <TableBody>
+                                    {selectedIns.baseFeatures.length > 0 && (
+                                        <>
+                                            <TableRow>
+                                                <TableCell colSpan={2}>
+                                                    <Typography variant="h6">
+                                                        Insurance Base Features
+                                                    </Typography>
+                                                </TableCell>
+                                            </TableRow>
+                                            {selectedIns.baseFeatures.map(
+                                                (item, index) => {
+                                                    if (!item) return;
+                                                    return (
+                                                        <TableRow key={index}>
+                                                            <TableCell
+                                                                colSpan={2}
+                                                            >
+                                                                {item}
+                                                            </TableCell>
+                                                        </TableRow>
+                                                    );
+                                                }
+                                            )}
+                                        </>
+                                    )}
+                                    {selectedIns.features.length > 0 && (
+                                        <>
+                                            <TableRow>
+                                                <TableCell colSpan={2}>
+                                                    <Typography variant="h6">
+                                                        Insurance Additional
+                                                        Features
+                                                    </Typography>
+                                                </TableCell>
+                                            </TableRow>
+                                            {selectedIns.features.map(
+                                                (item) => {
+                                                    if (!item) return;
+                                                    return (
+                                                        <TableRow
+                                                            key={item._id}
+                                                        >
+                                                            <TableCell>
+                                                                {item.name}
+                                                            </TableCell>
+                                                            <TableCell>
+                                                                {item.price}
+                                                            </TableCell>
+                                                        </TableRow>
+                                                    );
+                                                }
+                                            )}
+                                        </>
+                                    )}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </form>
+                </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+                <Button
+                    variant="outlined"
+                    onClick={() =>
+                        setModal((prev) => {
+                            return { ...prev, open: false };
+                        })
+                    }
+                >
+                    Cancel
+                </Button>
+                <Button
+                    variant="contained"
+                    color="error"
+                    onClick={deleteInsurance}
+                >
+                    Delete
+                </Button>
+                <Button
+                    variant="contained"
+                    color={
+                        selectedIns.status === 'suspended' ? 'primary' : 'error'
+                    }
+                    onClick={handleSuspend}
+                >
+                    {selectedIns.status === 'suspended'
+                        ? 'unsuspend'
+                        : 'suspend'}
                 </Button>
             </DialogActions>
         </>

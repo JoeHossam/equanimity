@@ -32,54 +32,48 @@ const InsuranceSkeleton = () => {
     );
 };
 
-const Insurance = ({ insuranceId, companies }) => {
+const NotFoundInsurance = () => {
+    return (
+        <Card>
+            <CardContent>
+                <Typography
+                    gutterBottom
+                    variant="h5"
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                    }}
+                    component="div"
+                >
+                    <Box>Disabled Insurance</Box>
+                </Typography>
+                <Divider />
+                <Typography variant="subtitle2">
+                    This insurance may be under update, suspended, hidden by the
+                    company or deleted. Please check on it another time
+                </Typography>
+            </CardContent>
+            <Divider />
+        </Card>
+    );
+};
+
+const Insurance = ({ insuranceId, companies, insurance }) => {
     const { user, userLoading } = useGlobalContext();
     const [isFavourite, setIsFavourite] = useState(true);
-    const [loading, setLoading] = useState(true);
-    const [insurance, setInsurance] = useState({});
-    const [company, setCompany] = useState({});
-
+    const [loading, setLoading] = useState(false);
+    const [company, setCompany] = useState('');
     const navigate = useNavigate();
 
     useEffect(() => {
+        if (!insurance) return;
         setLoading(true);
-        const fetchInsurance = async () => {
-            try {
-                const res = await axios.get(
-                    `${api_url}insurance/${insuranceId}`
-                );
-                setCompany(
-                    companies.find(
-                        (comp) => comp._id === res.data.insurance.createdBy
-                    )
-                );
-                setInsurance(res.data.insurance);
-                setLoading(false);
-            } catch (error) {
-                console.log(error.response);
-            }
-        };
-        fetchInsurance();
-    }, []);
-
-    useEffect(() => {
-        if (userLoading) return;
-        const man = async () => {
-            try {
-                const res = await axios.get(
-                    `${api_url}user/isfavourite?user=${user._id}&insurance=${insuranceId}`,
-                    { withCredentials: true }
-                );
-                console.log(res);
-                if (res.data.isFavourite === true) {
-                    setIsFavourite(true);
-                }
-            } catch (error) {
-                console.log(error.response);
-            }
-        };
-        man();
-    }, [userLoading]);
+        if (company !== '') {
+            setLoading(false);
+            return;
+        }
+        setCompany(companies.find((comp) => comp._id === insurance.createdBy));
+    }, [company]);
 
     const toggleFavourite = async () => {
         try {
@@ -99,14 +93,11 @@ const Insurance = ({ insuranceId, companies }) => {
             console.log(error.response);
         }
     };
-    const {
-        _id,
-        title,
-        category,
-        description,
-        basePrice: price,
-        createdBy,
-    } = insurance;
+
+    if (!insurance) {
+        return <NotFoundInsurance />;
+    }
+    const { _id, title, category, basePrice: price, createdBy } = insurance;
     return (
         <div>
             {loading ? (
@@ -193,6 +184,7 @@ const FavouritesList = () => {
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState([]);
     const [companies, setCompanies] = useState([]);
+    const [insurances, setInsurances] = useState([]);
 
     useEffect(() => {
         setLoading(true);
@@ -200,9 +192,12 @@ const FavouritesList = () => {
             const preRes = await axios.get(`${api_url}user/favourite`, {
                 withCredentials: true,
             });
-            const { favourites } = preRes.data;
+            setData(preRes.data.favourites);
 
-            setData(favourites);
+            const res = await axios.get(`${api_url}insurance`, {
+                withCredentials: true,
+            });
+            setInsurances(res.data.insurances);
 
             const res2 = await fetch(`${api_url}company`);
             const { companies: companiesData } = await res2.json();
@@ -251,6 +246,10 @@ const FavouritesList = () => {
                                 >
                                     <Insurance
                                         key={item._id}
+                                        insurance={insurances.find(
+                                            (ins) =>
+                                                ins._id === item.insuranceId
+                                        )}
                                         insuranceId={item.insuranceId}
                                         companies={companies}
                                     />
