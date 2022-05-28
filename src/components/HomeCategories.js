@@ -89,7 +89,7 @@ export default function ActionsGrid() {
             className={classes.item}
         >
             <item.icon color={theme.colors[item.color][6]} size={64} />
-            <Text size="xs" mt={7}>
+            <Text size="sm" mt={7}>
                 {item.title}
             </Text>
         </UnstyledButton>

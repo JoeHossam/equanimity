@@ -152,9 +152,12 @@ const AdminReviews = () => {
                                                                 'space-between',
                                                         }}
                                                     >
-                                                        <div>
+                                                        <Link
+                                                            to={`/admin/user/${item.userName._id}`}
+                                                            target="_blank"
+                                                        >
                                                             {item.userName.name}
-                                                        </div>
+                                                        </Link>
                                                         <div>
                                                             <Link
                                                                 to={`/insurance/${item.insuranceId}`}

@@ -1,6 +1,8 @@
 import {
     Button,
     Dialog,
+    Divider,
+    Link,
     Paper,
     Slide,
     Table,
@@ -45,7 +47,7 @@ const AdminPayments = () => {
         return <Loading />;
     }
     return (
-        <div style={{ margin: '2rem 10rem' }}>
+        <div style={{ margin: '2rem 8rem' }}>
             <TableContainer component={Paper}>
                 <Table>
                     <TableHead>
@@ -60,13 +62,11 @@ const AdminPayments = () => {
                             </TableCell>
                         </TableRow>
                         <TableRow>
-                            <TableCell align="center">Insurance</TableCell>
-                            <TableCell align="center">Company</TableCell>
-                            <TableCell align="center">Customer</TableCell>
-                            <TableCell align="center">
-                                Customer's Phone
-                            </TableCell>
-                            <TableCell align="center">Features</TableCell>
+                            <TableCell align="left">Insurance</TableCell>
+                            <TableCell align="left">Company</TableCell>
+                            <TableCell align="left">Customer</TableCell>
+                            <TableCell align="left">Customer's Phone</TableCell>
+                            <TableCell align="left">Features</TableCell>
                             <TableCell align="right">Total Price</TableCell>
                             <TableCell align="right">Date and Time</TableCell>
                         </TableRow>
@@ -76,7 +76,7 @@ const AdminPayments = () => {
                             return (
                                 <TableRow>
                                     <TableCell
-                                        align="center"
+                                        align="left"
                                         sx={{ cursor: 'pointer' }}
                                         onClick={() =>
                                             navigate(
@@ -87,7 +87,7 @@ const AdminPayments = () => {
                                         {item.insuranceName}
                                     </TableCell>
                                     <TableCell
-                                        align="center"
+                                        align="left"
                                         sx={{ cursor: 'pointer' }}
                                         onClick={() =>
                                             navigate(
@@ -97,26 +97,69 @@ const AdminPayments = () => {
                                     >
                                         {item.companyName}
                                     </TableCell>
-                                    <TableCell align="center">
-                                        {item.user[0].name || 'Deleted Account'}
+                                    <TableCell align="left">
+                                        {item.user[0] ? (
+                                            <Link
+                                                href={`user/${item.user[0]._id}`}
+                                                target="_blank"
+                                            >
+                                                {item.user[0].name}
+                                            </Link>
+                                        ) : (
+                                            'Deleted Account'
+                                        )}
                                     </TableCell>
-                                    <TableCell align="center">
+                                    <TableCell align="left">
                                         {item.phone}
                                     </TableCell>
-                                    <TableCell align="center">
-                                        {item.features.length === 0
-                                            ? '-'
-                                            : item.features.map((feat) => {
-                                                  return (
-                                                      <li key={feat.name}>
-                                                          {feat.name} -{' '}
-                                                          {feat.price.toLocaleString(
-                                                              'en-US'
-                                                          )}{' '}
-                                                          EGP
-                                                      </li>
-                                                  );
-                                              })}
+                                    <TableCell align="left">
+                                        <ul style={{ listStyle: 'inherit' }}>
+                                            {item.features.length === 0
+                                                ? '-'
+                                                : item.features.map(
+                                                      (feat, index) => {
+                                                          return (
+                                                              <>
+                                                                  <li
+                                                                      style={{
+                                                                          display:
+                                                                              'flex',
+                                                                          justifyContent:
+                                                                              'space-between',
+                                                                          margin: '10px 0',
+                                                                      }}
+                                                                      key={
+                                                                          feat.name
+                                                                      }
+                                                                  >
+                                                                      <div
+                                                                          style={{
+                                                                              width: '70%',
+                                                                          }}
+                                                                      >
+                                                                          {
+                                                                              feat.name
+                                                                          }
+                                                                      </div>
+                                                                      <div>
+                                                                          {feat.price.toLocaleString(
+                                                                              'en-US'
+                                                                          )}{' '}
+                                                                          EGP
+                                                                      </div>
+                                                                  </li>
+                                                                  {index !==
+                                                                      item
+                                                                          .features
+                                                                          .length -
+                                                                          1 && (
+                                                                      <Divider />
+                                                                  )}
+                                                              </>
+                                                          );
+                                                      }
+                                                  )}
+                                        </ul>
                                     </TableCell>
                                     <TableCell align="right">
                                         {item.totalPrice.toLocaleString(

@@ -35,6 +35,7 @@ import Footer from './components/Footer';
 import PurchaseList from './pages/PurchasesList';
 import AdminContact from './pages/admin/AdminContact';
 import AdminPayments from './pages/admin/AdminPayments';
+import User from './pages/User';
 
 const NavLayout = () => {
     return (
@@ -167,6 +168,7 @@ function App() {
                     <Route path="/admin/reviews" element={<AdminReviews />} />
                     <Route path="/admin/contact" element={<AdminContact />} />
                     <Route path="/admin/users" element={<AdminUsers />} />
+                    <Route path="/admin/user/:id" element={<User />} />
                 </Route>
                 <Route path="/companyadmin/login" element={<CompanyLogin />} />
                 <Route path="/admin/login" element={<AdminLogin />} />

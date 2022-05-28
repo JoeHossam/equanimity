@@ -362,7 +362,6 @@ const Insurance = () => {
                                 __html: description,
                             }}
                             style={{
-                                whiteSpace: 'pre',
                                 margin: '16px',
                                 padding: 0,
                             }}
@@ -376,9 +375,11 @@ const Insurance = () => {
                     >
                         <Typography>Base Services</Typography>
                     </AccordionSummary>
-                    <AccordionDetails>
+                    <AccordionDetails sx={{ padding: '0 16px' }}>
                         <Typography component="div">
-                            <ul>
+                            <ul
+                                style={{ listStyle: 'inherit', margin: '16px' }}
+                            >
                                 {baseList.length === 0
                                     ? 'No items Here'
                                     : baseList.map((item, index) => {
@@ -387,8 +388,9 @@ const Insurance = () => {
                                                   <Typography
                                                       component="div"
                                                       variant="body1"
+                                                      sx={{ margin: '15px 0' }}
                                                   >
-                                                      - {item}
+                                                      {item}
                                                   </Typography>
                                               </li>
                                           );
@@ -404,9 +406,11 @@ const Insurance = () => {
                     >
                         <Typography>Additional Services</Typography>
                     </AccordionSummary>
-                    <AccordionDetails>
+                    <AccordionDetails sx={{ padding: '0 16px' }}>
                         <Typography component="div">
-                            <ul>
+                            <ul
+                                style={{ listStyle: 'inherit', margin: '16px' }}
+                            >
                                 {selectedList.length === 0
                                     ? 'No items Here'
                                     : selectedList.map((item, index) => {
@@ -417,11 +421,18 @@ const Insurance = () => {
                                                           display: 'flex',
                                                           justifyContent:
                                                               'space-between',
+                                                          margin: '15px 0',
                                                       }}
                                                       component="div"
                                                       variant="body1"
                                                   >
-                                                      <div>- {item.name}</div>
+                                                      <div
+                                                          style={{
+                                                              width: '70%',
+                                                          }}
+                                                      >
+                                                          {item.name}
+                                                      </div>
                                                       <div>
                                                           {item.price.toLocaleString(
                                                               'en-US'
@@ -543,6 +554,7 @@ const Reviews = ({ reviewsData, setDialog }) => {
                     `${api_url}user/${review.user_type}/${review.userId}`
                 );
                 const user = await res.json();
+                console.log(user);
                 newReviews.push({ ...review, name: user.name, img: user.img });
             }
             setReviews(newReviews);
@@ -552,7 +564,7 @@ const Reviews = ({ reviewsData, setDialog }) => {
     }, [reviewsData]);
 
     if (loading) {
-        return <h4>'loading reviews..'</h4>;
+        return <Loading />;
     }
 
     return (
@@ -607,7 +619,7 @@ const Reviews = ({ reviewsData, setDialog }) => {
                                           title={
                                               <>
                                                   <Typography variant="h6">
-                                                      {item.name}
+                                                      {item.name} -
                                                   </Typography>
 
                                                   <Rating

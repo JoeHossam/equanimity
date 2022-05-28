@@ -61,6 +61,7 @@ const AdminUsers = () => {
                 <Typography
                     variant="h4"
                     sx={{ marginTop: '3rem', textAlign: 'center' }}
+                    mb={5}
                 >
                     Users
                 </Typography>
@@ -77,7 +78,15 @@ const AdminUsers = () => {
                                     }}
                                 >
                                     <TableCell component="th" scope="row">
-                                        {row.name}
+                                        <Link href={`/admin/user/${row._id}`}>
+                                            {row.name}
+                                        </Link>
+                                    </TableCell>
+                                    <TableCell component="th" scope="row">
+                                        0{row.phone}
+                                    </TableCell>
+                                    <TableCell component="th" scope="row">
+                                        {row.email}
                                     </TableCell>
                                 </TableRow>
                             ))}

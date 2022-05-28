@@ -103,7 +103,7 @@ const AdminNav = () => {
                 >
                     Contacts
                 </Link>
-                {/* <Link
+                <Link
                     style={{
                         color: '#fff',
                         margin: '0 1rem',
@@ -113,7 +113,7 @@ const AdminNav = () => {
                     onClick={() => navigate('/admin/users')}
                 >
                     Users
-                </Link> */}
+                </Link>
                 <Link
                     style={{
                         color: '#fff',
