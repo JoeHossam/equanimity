@@ -138,8 +138,13 @@ const SingleInsurance = (props) => {
                                 justifyContent: 'space-between',
                             }}
                         >
-                            <div style={{ marginBottom: '0.5rem' }}>
-                                {title}
+                            <div>
+                                <Typography
+                                    variant="h5"
+                                    sx={{ marginBottom: '0.5rem' }}
+                                >
+                                    {title}
+                                </Typography>
                                 <Typography
                                     gutterBottom
                                     variant="subtitle1"
@@ -149,7 +154,13 @@ const SingleInsurance = (props) => {
                                         fontFamily: 'Quicksand',
                                     }}
                                 >
-                                    <Link to={`/company/${createdBy}`}>
+                                    <Link
+                                        style={{
+                                            color: '#faaf00',
+                                            fontWeight: 'bolder',
+                                        }}
+                                        to={`/company/${createdBy}`}
+                                    >
                                         {company.name}
                                     </Link>
                                 </Typography>
@@ -206,28 +217,42 @@ const SingleInsurance = (props) => {
                                 width: '100%',
                                 display: 'flex',
                                 justifyContent: 'space-between',
+                                alignItems: 'center',
                             }}
                         >
-                            <div
-                                style={{
+                            <Typography
+                                variant="body1"
+                                sx={{ marginTop: '0.5rem', fontWeight: 'bold' }}
+                            >
+                                {basePrice} EGP
+                            </Typography>
+                            <Box
+                                sx={{
                                     display: 'flex',
                                     flexDirection: 'column',
-                                    alignItems: 'center',
+                                    justifyContent: 'space-between',
+                                    alignItems: 'flex-end',
                                 }}
                             >
-                                {rating.toFixed(2)}
-                                <div style={{ fontSize: '12px' }}>
-                                    {reviewCount} reviews
+                                <Rating
+                                    readOnly
+                                    value={rating}
+                                    precision={0.5}
+                                />
+                                <div
+                                    style={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        alignItems: 'center',
+                                    }}
+                                >
+                                    {rating.toFixed(2)}
+                                    <div style={{ fontSize: '12px' }}>
+                                        {reviewCount} reviews
+                                    </div>
                                 </div>
-                            </div>
-                            <Rating readOnly value={rating} precision={0.5} />
+                            </Box>
                         </Box>
-                        <Typography
-                            variant="subtitle2"
-                            sx={{ marginTop: '0.5rem' }}
-                        >
-                            {basePrice} EGP
-                        </Typography>
                     </CardContent>
                     <Divider />
                     <CardActions>
