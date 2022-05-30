@@ -208,17 +208,23 @@ const FavouritesList = () => {
     }, []);
 
     return (
-        <div>
+        <Box
+            sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                minHeight: 'calc(100vh - 150px)',
+            }}
+        >
             {loading ? (
-                <Box sx={{ display: 'flex' }}>
-                    <CircularProgress />
-                </Box>
+                <CircularProgress />
             ) : data.length === 0 ? (
-                'You have no favourites'
+                <Typography>You have no saved insurances.</Typography>
             ) : (
                 <div>
                     <Typography
-                        variant="h2"
+                        variant="h4"
                         align="center"
                         sx={{ marginBottom: '3rem' }}
                     >
@@ -230,7 +236,7 @@ const FavouritesList = () => {
                             flexDirection: 'column',
                             margin: 'auto',
                             alignItems: 'center',
-                            width: '100vw',
+                            minWidth: '40vw',
                         }}
                     >
                         {data.map((item) => {
@@ -240,7 +246,7 @@ const FavouritesList = () => {
                                     sx={{
                                         backgroundColor: 'white',
                                         borderRadius: '0.25rem',
-                                        width: '40%',
+                                        width: '100%',
                                         marginBottom: '2rem',
                                     }}
                                 >
@@ -259,7 +265,7 @@ const FavouritesList = () => {
                     </div>
                 </div>
             )}
-        </div>
+        </Box>
     );
 };
 export default FavouritesList;

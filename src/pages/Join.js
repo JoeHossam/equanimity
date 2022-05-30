@@ -265,7 +265,6 @@ const Join = () => {
                                 * Wrong Email or password
                             </Typography>
                         )}
-                        <a href="#">Forgot your password?</a>
                         <LoadingButton
                             type="submit"
                             fullWidth

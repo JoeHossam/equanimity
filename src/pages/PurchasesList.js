@@ -121,27 +121,29 @@ const PurchaseList = () => {
     }, []);
 
     return (
-        <div>
+        <Box
+            sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                minHeight: 'calc(100vh - 150px)',
+            }}
+        >
             {loading ? (
-                <Box sx={{ display: 'flex' }}>
-                    <CircularProgress />
-                </Box>
+                <CircularProgress />
             ) : data.length === 0 ? (
-                "You havn't made any purchases yet"
+                <Typography>You haven't made any purchases yet.</Typography>
             ) : (
                 <div>
-                    <Typography variant="h2" sx={{ marginBottom: '3rem' }}>
-                        my purchases
-                    </Typography>
-                    <div
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            margin: 'auto',
-                            alignItems: 'center',
-                            width: '100vw',
-                        }}
+                    <Typography
+                        variant="h4"
+                        align="center"
+                        sx={{ marginBottom: '3rem' }}
                     >
+                        purchases
+                    </Typography>
+                    <div>
                         {data.map((item) => {
                             return (
                                 <Grid
@@ -149,7 +151,7 @@ const PurchaseList = () => {
                                     sx={{
                                         backgroundColor: 'white',
                                         borderRadius: '0.25rem',
-                                        width: '40%',
+                                        width: '100%',
                                         marginBottom: '2rem',
                                     }}
                                 >
@@ -164,7 +166,7 @@ const PurchaseList = () => {
                     </div>
                 </div>
             )}
-        </div>
+        </Box>
     );
 };
 export default PurchaseList;

@@ -35,7 +35,16 @@ import Footer from './components/Footer';
 import PurchaseList from './pages/PurchasesList';
 import AdminContact from './pages/admin/AdminContact';
 import AdminPayments from './pages/admin/AdminPayments';
+<<<<<<< Updated upstream
 import User from './pages/User';
+=======
+import {
+    BrandWhatsapp,
+    BrandFacebook,
+    BrandInstagram,
+    BrandTwitter,
+} from 'tabler-icons-react';
+>>>>>>> Stashed changes
 
 const NavLayout = () => {
     return (
@@ -59,19 +68,19 @@ const NavLayout = () => {
                 links={[
                     {
                         link: '#',
-                        label: 'Contact',
+                        label: <BrandWhatsapp />,
                     },
                     {
                         link: '#',
-                        label: 'Privacy',
+                        label: <BrandTwitter />,
                     },
                     {
                         link: '#',
-                        label: 'Blog',
+                        label: <BrandInstagram />,
                     },
                     {
                         link: '#',
-                        label: 'Careers',
+                        label: <BrandFacebook />,
                     },
                 ]}
             />

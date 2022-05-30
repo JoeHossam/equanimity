@@ -24,10 +24,16 @@ const CompanyList = () => {
 
     return (
         <Box sx={{ margin: '1rem', padding: '0.5rem' }}>
-            <ul>
+            <ul
+                style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                }}
+            >
                 {data.map((item) => {
                     return (
-                        <li key={item._id}>
+                        <li style={{}} key={item._id}>
                             <Link to={`/company/${item._id}`}>
                                 <h4>{item.name}</h4>
                             </Link>

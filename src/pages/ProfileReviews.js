@@ -6,6 +6,7 @@ import {
     Card,
     CardContent,
     CardHeader,
+    CircularProgress,
     Dialog,
     DialogActions,
     DialogContent,
@@ -21,6 +22,7 @@ import React, { useEffect, useState } from 'react';
 import { api_url, useGlobalContext } from '../context';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import Loading from './Loading';
 import EditIcon from '@mui/icons-material/Edit';
 import ClearIcon from '@mui/icons-material/Clear';
 
@@ -74,20 +76,28 @@ const ProfileReviews = () => {
         getInsurances();
     }, [reviews]);
 
-    if (loading || userLoading) {
-        return 'Loading...';
-    }
-
-    if (reviews.length === 0) {
-        return <h2>You haven't made any reviews.</h2>;
-    }
-
     return (
-        <Reviews
-            reviews={reviews}
-            setReviews={setReviews}
-            insurances={insurances}
-        />
+        <Box
+            sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                minHeight: 'calc(100vh - 150px)',
+            }}
+        >
+            {loading ? (
+                <CircularProgress />
+            ) : reviews.length === 0 ? (
+                <Typography>You haven't made any reviews.</Typography>
+            ) : (
+                <Reviews
+                    reviews={reviews}
+                    setReviews={setReviews}
+                    insurances={insurances}
+                />
+            )}
+        </Box>
     );
 };
 
@@ -166,13 +176,13 @@ const Reviews = ({ reviews, setReviews, insurances }) => {
             setSnack({ open: true, msg: error.message, type: 'error' });
         }
     };
-
-    if (reviews.length === 0) {
-        return <h2>You haven't made any reviews.</h2>;
-    }
     return (
         <div>
-            <Typography variant="h2" sx={{ marginBottom: '3rem' }}>
+            <Typography
+                variant="h4"
+                align="center"
+                sx={{ marginBottom: '3rem' }}
+            >
                 my reviews
             </Typography>
             <ul
@@ -182,7 +192,7 @@ const Reviews = ({ reviews, setReviews, insurances }) => {
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
-                    width: '100vw',
+                    minWidth: '60vw',
                 }}
             >
                 {reviews.map((item) => {
@@ -198,7 +208,7 @@ const Reviews = ({ reviews, setReviews, insurances }) => {
                                 style={{
                                     backgroundColor: 'white',
                                     borderRadius: '0.25rem',
-                                    width: '60%',
+                                    width: '100%',
                                     marginBottom: '2rem',
                                 }}
                             >
