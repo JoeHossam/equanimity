@@ -128,7 +128,13 @@ const SingleInsurance = (props) => {
             {loading || insuranceLoading ? (
                 <InsuranceSkeleton />
             ) : (
-                <Card>
+                <Card
+                    sx={{
+                        // border: '1px solid #ccc',
+                        boxShadow: `0px 2px 4px -1px rgb(0 0 0 / 20%),
+        0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%)`,
+                    }}
+                >
                     <CardContent>
                         <Typography
                             variant="h5"
@@ -221,7 +227,7 @@ const SingleInsurance = (props) => {
                             }}
                         >
                             <Typography
-                                variant="body1"
+                                variant="h5"
                                 sx={{ marginTop: '0.5rem', fontWeight: 'bold' }}
                             >
                                 {basePrice} EGP
@@ -246,7 +252,9 @@ const SingleInsurance = (props) => {
                                         alignItems: 'center',
                                     }}
                                 >
-                                    {rating.toFixed(2)}
+                                    <Typography variant="h6">
+                                        {rating.toFixed(2)}
+                                    </Typography>
                                     <div style={{ fontSize: '12px' }}>
                                         {reviewCount} reviews
                                     </div>

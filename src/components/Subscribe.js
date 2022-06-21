@@ -7,12 +7,13 @@ import {
     Button,
     Image,
 } from '@mantine/core';
-const image = 'https://ui.mantine.dev/_next/static/media/image.969ed1dc.svg';
+import image from '../images/subscribe.svg';
 
 const useStyles = createStyles((theme) => ({
     wrapper: {
         display: 'flex',
         alignItems: 'center',
+        justifyContent: 'space-evenly',
         padding: theme.spacing.xl * 2,
         borderRadius: theme.radius.md,
         backgroundColor:
