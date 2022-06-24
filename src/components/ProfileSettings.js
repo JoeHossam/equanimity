@@ -24,8 +24,30 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import { createStyles } from '@mantine/core';
+
+const useStyles = createStyles((theme) => ({
+    wrapper: {
+        display: 'grid',
+        gridTemplateColumns: 'repeat(12,1fr)',
+        gap: '20px',
+        margin: '0 40px',
+        [theme.fn.smallerThan('md')]: {
+            display: 'block',
+        },
+    },
+    leftSide: {
+        gridColumnStart: 1,
+        gridColumnEnd: 4,
+    },
+    rightSide: {
+        gridColumnStart: 5,
+        gridColumnEnd: 13,
+    },
+}));
 
 const ProfileSettings = () => {
+    const { classes, theme } = useStyles();
     const { user, setUser, userLoading, setIsLoggedIn } = useGlobalContext();
     const [fetching, setFetching] = useState(false);
     const [passFetching, setPassFetching] = useState(false);
@@ -157,228 +179,229 @@ const ProfileSettings = () => {
         return 'loading..';
     }
     return (
-        <CardHeader
-            sx={{ alignItems: 'flex-start', justifyContent: 'center' }}
-            avatar={
+        <main className={classes.wrapper}>
+            <Box
+                className={classes.leftSide}
+                sx={{
+                    marginTop: '2rem',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                }}
+            >
+                <div>
+                    <form onSubmit={changePhoto} htmlFor="file-input">
+                        <Avatar
+                            alt={user.name}
+                            src={newImage === '' ? user.img : newImage}
+                            sx={{ width: 128, height: 128 }}
+                        />
+                        <FileBase
+                            type="file"
+                            multiple={false}
+                            onDone={({ base64 }) => setNewImage(base64)}
+                        />
+                        <Button type="submit">Submit</Button>
+                    </form>
+                </div>
+                <Typography variant="h2">{user.name}</Typography>
+            </Box>
+            <div className={classes.rightSide}>
                 <Box
                     sx={{
+                        marginTop: '2rem',
                         display: 'flex',
                         flexDirection: 'column',
-                        alignItems: 'center',
+                        alignItems: 'stretch',
+                        justifyContent: 'center',
                     }}
                 >
-                    <div>
-                        <form onSubmit={changePhoto} htmlFor="file-input">
-                            <Avatar
-                                alt={user.name}
-                                src={newImage === '' ? user.img : newImage}
-                                sx={{ width: 128, height: 128 }}
-                            />
-                            <FileBase
-                                type="file"
-                                multiple={false}
-                                onDone={({ base64 }) => setNewImage(base64)}
-                            />
-                            <Button type="submit">Submit</Button>
-                        </form>
-                    </div>
-                    <Typography variant="h2">{user.name}</Typography>
-                </Box>
-            }
-            title={
-                <>
-                    <Box sx={{ marginTop: '2rem' }}>
-                        <form onSubmit={handleUpdate}>
-                            <Typography variant="h5">
-                                Update User Settings
-                            </Typography>
-                            <TextField
-                                sx={{
-                                    marginY: '0.25rem',
-                                    maxWidth: '444px',
-                                }}
-                                id="name"
-                                label="Name"
-                                fullWidth
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                name="name"
-                                autoComplete="name"
-                                value={name}
-                                onChange={(e) => setName(e.target.value)}
-                            />
-                            <TextField
-                                sx={{
-                                    marginY: '0.25rem',
-                                    maxWidth: '444px',
-                                }}
-                                id="age"
-                                label="Age"
-                                fullWidth
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                name="age"
-                                autoComplete="age"
-                                value={age}
-                                onChange={(e) => setAge(e.target.value)}
-                            />
-                            <TextField
-                                sx={{
-                                    marginY: '0.25rem',
-                                    maxWidth: '444px',
-                                }}
-                                id="phone"
-                                label="phone"
-                                fullWidth
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                name="phone"
-                                autoComplete="phone"
-                                value={phone}
-                                onChange={(e) => setPhone(e.target.value)}
-                            />
-                            <TextField
-                                sx={{
-                                    marginY: '0.25rem',
-                                    maxWidth: '444px',
-                                }}
-                                id="email"
-                                label="Email Address"
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                fullWidth
-                                name="email"
-                                autoComplete="email"
-                                disabled
-                                value={user.email}
-                                // onChange={(e) => setEmail(e.target.value)}
-                                // helperText={registerFail.email || ' '}
-                                // error={registerFail.email}
-                            />
-                            <LoadingButton
-                                type="submit"
-                                variant="contained"
-                                sx={{ mt: 2, mb: 2 }}
-                                loading={fetching}
-                                disableFocusRipple
-                            >
-                                Update
-                            </LoadingButton>
-                        </form>
-                        <Divider />
-                        <form onSubmit={handlePassword}>
-                            <Typography variant="h5">
-                                Change Password
-                            </Typography>
-
-                            <TextField
-                                sx={{
-                                    marginY: '0.25rem',
-                                    maxWidth: '444px',
-                                }}
-                                name="oldpassword"
-                                label="Old Password"
-                                fullWidth
-                                type="password"
-                                id="oldpassword"
-                                autoComplete="current-password"
-                                value={oldPassword}
-                                onChange={(e) => setOldPassword(e.target.value)}
-                                // helperText={registerFail.password || ' '}
-                                // error={registerFail.password}
-                            />
-                            <TextField
-                                sx={{
-                                    marginY: '0.25rem',
-                                    maxWidth: '444px',
-                                }}
-                                name="password"
-                                label="New Password"
-                                fullWidth
-                                type="password"
-                                id="password"
-                                autoComplete="current-password"
-                                value={newPassword}
-                                onChange={(e) => setNewPassword(e.target.value)}
-                                // helperText={registerFail.password || ' '}
-                                // error={registerFail.password}
-                            />
-                            <LoadingButton
-                                type="submit"
-                                variant="contained"
-                                sx={{ mt: 2, mb: 2 }}
-                                loading={passFetching}
-                                disableFocusRipple
-                            >
-                                Update password
-                            </LoadingButton>
-                        </form>
-                        <Divider />
-
+                    <form onSubmit={handleUpdate}>
+                        <Typography variant="h5">Update User Info</Typography>
+                        <TextField
+                            sx={{
+                                marginY: '0.25rem',
+                                maxWidth: '444px',
+                            }}
+                            id="name"
+                            label="Name"
+                            fullWidth
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                            name="name"
+                            autoComplete="name"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                        />
+                        <TextField
+                            sx={{
+                                marginY: '0.25rem',
+                                maxWidth: '444px',
+                            }}
+                            id="age"
+                            label="Age"
+                            fullWidth
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                            name="age"
+                            autoComplete="age"
+                            value={age}
+                            onChange={(e) => setAge(e.target.value)}
+                        />
+                        <TextField
+                            sx={{
+                                marginY: '0.25rem',
+                                maxWidth: '444px',
+                            }}
+                            id="phone"
+                            label="phone"
+                            fullWidth
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                            name="phone"
+                            autoComplete="phone"
+                            value={phone}
+                            onChange={(e) => setPhone(e.target.value)}
+                        />
+                        <TextField
+                            sx={{
+                                marginY: '0.25rem',
+                                maxWidth: '444px',
+                            }}
+                            id="email"
+                            label="Email Address"
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                            fullWidth
+                            name="email"
+                            autoComplete="email"
+                            disabled
+                            value={user.email}
+                            // onChange={(e) => setEmail(e.target.value)}
+                            // helperText={registerFail.email || ' '}
+                            // error={registerFail.email}
+                        />
                         <LoadingButton
                             type="submit"
                             variant="contained"
-                            color="error"
                             sx={{ mt: 2, mb: 2 }}
-                            loading={deleteFetching}
+                            loading={fetching}
                             disableFocusRipple
-                            onClick={() => setOpenDeleteDialog(true)}
                         >
-                            Delete Account
+                            Update
                         </LoadingButton>
-                    </Box>
-                    <Snackbar
-                        open={showError.isError}
-                        autoHideDuration={6000}
-                        onClose={() =>
-                            setShowError({ ...showError, isError: false })
-                        }
-                    >
-                        <Alert
-                            onClose={() =>
-                                setShowError({
-                                    ...showError,
-                                    isError: false,
-                                })
-                            }
-                            severity={showError.type}
-                            sx={{ width: '100%' }}
+                    </form>
+                    <Divider orientation="horizontal" />
+                    <form onSubmit={handlePassword}>
+                        <Typography variant="h5">Change Password</Typography>
+
+                        <TextField
+                            sx={{
+                                marginY: '0.25rem',
+                                maxWidth: '444px',
+                            }}
+                            name="oldpassword"
+                            label="Old Password"
+                            fullWidth
+                            type="password"
+                            id="oldpassword"
+                            autoComplete="current-password"
+                            value={oldPassword}
+                            onChange={(e) => setOldPassword(e.target.value)}
+                            // helperText={registerFail.password || ' '}
+                            // error={registerFail.password}
+                        />
+                        <TextField
+                            sx={{
+                                marginY: '0.25rem',
+                                maxWidth: '444px',
+                            }}
+                            name="password"
+                            label="New Password"
+                            fullWidth
+                            type="password"
+                            id="password"
+                            autoComplete="current-password"
+                            value={newPassword}
+                            onChange={(e) => setNewPassword(e.target.value)}
+                            // helperText={registerFail.password || ' '}
+                            // error={registerFail.password}
+                        />
+                        <LoadingButton
+                            type="submit"
+                            variant="contained"
+                            sx={{ mt: 2, mb: 2 }}
+                            loading={passFetching}
+                            disableFocusRipple
                         >
-                            {showError.msg}
-                        </Alert>
-                    </Snackbar>
-                    <Dialog
-                        open={openDeleteDialog}
-                        onClose={() => setOpenDeleteDialog(false)}
-                        aria-labelledby="alert-dialog-title"
-                        aria-describedby="alert-dialog-description"
+                            Update password
+                        </LoadingButton>
+                    </form>
+                    <Divider />
+
+                    <LoadingButton
+                        type="submit"
+                        variant="contained"
+                        color="error"
+                        sx={{ margin: '16px auto' }}
+                        loading={deleteFetching}
+                        disableFocusRipple
+                        onClick={() => setOpenDeleteDialog(true)}
                     >
-                        <DialogTitle id="alert-dialog-title">
-                            {'Delete Account'}
-                        </DialogTitle>
-                        <DialogContent>
-                            <DialogContentText id="alert-dialog-description">
-                                Are you sure you want to delete your account?
-                                all data on this account will be lost and there
-                                is no going back
-                            </DialogContentText>
-                        </DialogContent>
-                        <DialogActions>
-                            <Button onClick={() => setOpenDeleteDialog(false)}>
-                                cancel
-                            </Button>
-                            <Button color="error" onClick={handleDelete}>
-                                Delete
-                            </Button>
-                        </DialogActions>
-                    </Dialog>
-                </>
-            }
-        />
+                        Delete Account
+                    </LoadingButton>
+                </Box>
+                <Snackbar
+                    open={showError.isError}
+                    autoHideDuration={6000}
+                    onClose={() =>
+                        setShowError({ ...showError, isError: false })
+                    }
+                >
+                    <Alert
+                        onClose={() =>
+                            setShowError({
+                                ...showError,
+                                isError: false,
+                            })
+                        }
+                        severity={showError.type}
+                        sx={{ width: '100%' }}
+                    >
+                        {showError.msg}
+                    </Alert>
+                </Snackbar>
+                <Dialog
+                    open={openDeleteDialog}
+                    onClose={() => setOpenDeleteDialog(false)}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title">
+                        {'Delete Account'}
+                    </DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            Are you sure you want to delete your account? all
+                            data on this account will be lost and there is no
+                            going back
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={() => setOpenDeleteDialog(false)}>
+                            cancel
+                        </Button>
+                        <Button color="error" onClick={handleDelete}>
+                            Delete
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+            </div>
+        </main>
     );
 };
 

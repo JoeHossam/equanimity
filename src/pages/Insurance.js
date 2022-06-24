@@ -236,7 +236,6 @@ const Insurance = () => {
         rating,
         reviewCount,
         description,
-        features,
     } = insuranceData.insurance;
 
     // Get Company
@@ -247,7 +246,6 @@ const Insurance = () => {
 
     return (
         <main className={classes.wrapper}>
-            {/* title, rating, and company name */}
             <section className={classes.leftSide}>
                 <div>
                     <div
@@ -553,8 +551,7 @@ const Reviews = ({ reviewsData, setDialog }) => {
                 const res = await fetch(
                     `${api_url}user/${review.user_type}/${review.userId}`
                 );
-                const user = await res.json();
-                console.log(user);
+                const { user } = await res.json();
                 newReviews.push({ ...review, name: user.name, img: user.img });
             }
             setReviews(newReviews);
@@ -599,11 +596,9 @@ const Reviews = ({ reviewsData, setDialog }) => {
                 {reviews.length === 0
                     ? 'There are no reviews yet.'
                     : reviews.map((item) => {
-                          console.log('item', item);
                           return (
-                              <>
+                              <div key={item._id}>
                                   <li
-                                      key={item._id}
                                       style={{
                                           backgroundColor: 'white',
                                       }}
@@ -619,7 +614,7 @@ const Reviews = ({ reviewsData, setDialog }) => {
                                           title={
                                               <>
                                                   <Typography variant="h6">
-                                                      {item.name} -
+                                                      {item.name}
                                                   </Typography>
 
                                                   <Rating
@@ -647,7 +642,7 @@ const Reviews = ({ reviewsData, setDialog }) => {
                                       />
                                   </li>
                                   <Divider />
-                              </>
+                              </div>
                           );
                       })}
             </ul>
@@ -682,6 +677,7 @@ const LeaveReview = ({ insuranceId, setReviewData, setDialog, dialog }) => {
             const revRes = await fetch(`${api_url}review/${insuranceId}`);
             const revData = await revRes.json();
             setReviewData(revData);
+            setDialog({ ...dialog, open: false });
         } catch (error) {
             console.error(error.response);
             if (error.response.status === 401) {

@@ -374,7 +374,7 @@ const Create = ({ setModal, setRe }) => {
             console.log(error.message);
         }
         setModal((prev) => {
-            return { ...prev, modal: false };
+            return { ...prev, open: false };
         });
         setRe({});
     };
@@ -680,7 +680,9 @@ const Edit = ({ setModal, selectedIns, setRe }) => {
                 >
                     Cancel
                 </Button>
-                <Button onClick={handleSubmit}>Update</Button>
+                <Button variant="contained" onClick={handleSubmit}>
+                    Update
+                </Button>
             </DialogActions>
         </>
     );
@@ -950,50 +952,58 @@ const Purchases = () => {
                 <TableHead>
                     <TableRow>
                         <TableCell>Insurance name</TableCell>
-                        <TableCell align="right">Phone</TableCell>
-                        <TableCell align="right">Features Bought</TableCell>
+                        <TableCell align="left">Phone</TableCell>
+                        <TableCell align="left">Features Bought</TableCell>
                         <TableCell align="right">total price</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {data.length === 0
-                        ? 'List is empty'
-                        : data.map((row) => (
-                              <TableRow
-                                  key={row._id}
-                                  sx={{
-                                      '&:last-child td, &:last-child th': {
-                                          border: 0,
-                                      },
-                                  }}
-                              >
-                                  <TableCell
-                                      sx={{ cursor: 'pointer' }}
-                                      component="th"
-                                      scope="row"
-                                      onClick={() =>
-                                          navigate(
-                                              `/insurance/${row.insuranceId}`
-                                          )
-                                      }
-                                  >
-                                      {row.insuranceName}
-                                  </TableCell>
-                                  <TableCell align="right">
-                                      {row.phone}
-                                  </TableCell>
-                                  <TableCell align="right">
-                                      {row.features.length === 0
-                                          ? '-'
-                                          : row.features.map((feature) => {
-                                                return <li>{feature.name}</li>;
-                                            })}
-                                  </TableCell>
-                                  <TableCell align="right">
-                                      {row.totalPrice} EGP
-                                  </TableCell>
-                              </TableRow>
-                          ))}
+                    {data.length === 0 ? (
+                        <TableRow>
+                            <TableCell align="center" colSpan={4}>
+                                <Typography variant="h5">
+                                    No purchases have been made yet
+                                </Typography>
+                            </TableCell>
+                        </TableRow>
+                    ) : (
+                        data.map((row) => (
+                            <TableRow
+                                key={row._id}
+                                sx={{
+                                    '&:last-child td, &:last-child th': {
+                                        border: 0,
+                                    },
+                                }}
+                            >
+                                <TableCell
+                                    sx={{ cursor: 'pointer' }}
+                                    component="th"
+                                    scope="row"
+                                    onClick={() =>
+                                        navigate(
+                                            `/insurance/${row.insuranceId}`
+                                        )
+                                    }
+                                >
+                                    {row.insuranceName}
+                                </TableCell>
+                                <TableCell align="left">
+                                    +20{row.phone}
+                                </TableCell>
+                                <TableCell align="left">
+                                    {row.features.length === 0
+                                        ? '-'
+                                        : row.features.map((feature) => {
+                                              return <li>{feature.name}</li>;
+                                          })}
+                                </TableCell>
+                                <TableCell align="right">
+                                    {row.totalPrice} EGP
+                                </TableCell>
+                            </TableRow>
+                        ))
+                    )}
                 </TableBody>
             </Table>
         </TableContainer>

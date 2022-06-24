@@ -39,6 +39,7 @@ const AdminCategories = () => {
         type: 'create',
         size: 'md',
     });
+    const [re, setRe] = useState(false);
     useEffect(() => {
         setLoading(true);
         const fetchCat = async () => {
@@ -53,8 +54,7 @@ const AdminCategories = () => {
             }
         };
         fetchCat();
-    }, []);
-    const [re, setRe] = useState(false);
+    }, [re]);
 
     if (loading) {
         return <Loading />;
@@ -189,7 +189,7 @@ const Create = ({ setModal, setRe }) => {
             console.log(error.message);
         }
         setModal((prev) => {
-            return { ...prev, modal: false };
+            return { ...prev, open: false };
         });
         setRe({});
     };
@@ -261,6 +261,7 @@ const Edit = ({ setModal, selectedCat, setRe }) => {
             console.log(error.response);
             return;
         }
+        setRe({});
     };
     return (
         <>
@@ -292,7 +293,9 @@ const Edit = ({ setModal, selectedCat, setRe }) => {
                 >
                     Cancel
                 </Button>
-                <Button onClick={handleSubmit}>Update</Button>
+                <Button variant="contained" onClick={handleSubmit}>
+                    Update
+                </Button>
             </DialogActions>
         </>
     );

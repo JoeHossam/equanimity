@@ -110,7 +110,7 @@ const AdminPayments = () => {
                                         )}
                                     </TableCell>
                                     <TableCell align="left">
-                                        {item.phone}
+                                        +20{item.phone}
                                     </TableCell>
                                     <TableCell align="left">
                                         <ul style={{ listStyle: 'inherit' }}>

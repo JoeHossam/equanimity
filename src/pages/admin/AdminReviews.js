@@ -25,6 +25,7 @@ const AdminReviews = () => {
     const [deleteId, setDeleteId] = useState(0);
     const [reviews, setReviews] = useState([]);
     const [sortBy, setSortBy] = useState('dateup');
+    const [re, setRe] = useState(false);
     useEffect(() => {
         setLoading(true);
         const fetchRev = async () => {
@@ -64,7 +65,7 @@ const AdminReviews = () => {
             }
         };
         fetchRev();
-    }, []);
+    }, [re]);
 
     useEffect(() => {
         switch (sortBy) {
@@ -98,6 +99,8 @@ const AdminReviews = () => {
         } catch (error) {
             console.log(error.response);
         }
+        setOpenDelModal(false);
+        setRe({});
     };
 
     if (loading) {
