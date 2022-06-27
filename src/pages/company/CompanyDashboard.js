@@ -579,8 +579,11 @@ const Edit = ({ setModal, selectedIns, setRe }) => {
             });
         } catch (error) {
             console.log(error.response);
-            return;
         }
+        setModal((prev) => {
+            return { ...prev, open: false };
+        });
+        setRe({});
     };
     return (
         <>

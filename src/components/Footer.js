@@ -48,8 +48,7 @@ export default function FooterSimple({ links }) {
     return (
         <div className={classes.footer}>
             <Container className={classes.inner}>
-                {/* <MantineLogo /> */}
-                <>some logo</>
+                <img height="50px" src="logoWordRight.png" />
                 <Group className={classes.links}>{items}</Group>
             </Container>
         </div>

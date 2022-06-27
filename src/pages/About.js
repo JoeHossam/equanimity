@@ -8,42 +8,42 @@ import { FaqSimple } from '../components/FrequentlyAskedQuestions';
 const About = () => {
     const team = [
         {
-            avatar: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=250&q=80',
+            avatar: 'https://cdn.discordapp.com/attachments/872155174884478977/990706145964474388/icon2.png',
             job: 'Head of IT Department',
             name: 'Youssef Hossam',
             email: 'youssefhossam@equanimity.com',
             phone: '+201000000000',
         },
         {
-            avatar: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=250&q=80',
+            avatar: 'https://cdn.discordapp.com/attachments/872155174884478977/990706867078561802/icon4.png',
             job: 'Head of the business department',
             name: 'Youssef Amr',
             email: 'youssefamr@equanimity.com',
             phone: '+201000000000',
         },
         {
-            avatar: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=250&q=80',
+            avatar: 'https://cdn.discordapp.com/attachments/916770519573987329/990696794889547806/download20220106225237.png',
             job: 'Head of the analysis and design Department',
             name: 'Alaa Mohamed',
             email: 'alaa@equanimity.com',
             phone: '+201000000000',
         },
         {
-            avatar: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=250&q=80',
+            avatar: 'https://cdn.discordapp.com/attachments/872155174884478977/990707868854517810/icon5.png',
             job: 'An IT Developer',
             name: 'Noha Hossam',
             email: 'nohahossam@equanimity.com',
             phone: '+201000000000',
         },
         {
-            avatar: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=250&q=80',
+            avatar: 'https://cdn.discordapp.com/attachments/872155174884478977/990706145779933256/icon1.png',
             job: 'A senior leader',
             name: 'Mohamed Hosny',
             email: 'mohamedhorny@equanimity.com',
             phone: '+201000000000',
         },
         {
-            avatar: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=250&q=80',
+            avatar: 'https://cdn.discordapp.com/attachments/872155174884478977/990706146170007662/icon3.png',
             job: 'A system analyst',
             name: 'Amr Ali',
             email: 'amrali@equanimity.com',

@@ -5,6 +5,7 @@ import {
     Autocomplete,
     Group,
     Burger,
+    Image,
 } from '@mantine/core';
 import { Coin, Search } from 'tabler-icons-react';
 import {
@@ -23,7 +24,7 @@ import {
     MenuItem,
     Tooltip,
 } from '@mui/material';
-// import { MantineLogo } from '../../shared/MantineLogo';
+import EquanimityLogo from '../images/Equanimity-logos_transparent.svg';
 import StarRateIcon from '@mui/icons-material/StarRate';
 import { AddBox, Logout, Paid } from '@mui/icons-material';
 import PersonIcon from '@mui/icons-material/Person';
@@ -175,9 +176,9 @@ export function HeaderSearch({ links }) {
                             onClick={() => setOpened(!opened)}
                             size="sm"
                         />
-                        {/* <MantineLogo /> */}
-                        logo
-                        <Group ml={50} spacing={5} className={classes.links}>
+                        {/* <EquanimityLogo /> */}
+                        <img height="50px" src="logoNoWord.png" />
+                        <Group spacing={5} className={classes.links}>
                             {items}
                         </Group>
                     </Group>

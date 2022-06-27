@@ -11,9 +11,11 @@ import {
 } from '@mantine/core';
 import {
     ReceiptOff,
+    AdjustmentsAlt,
+    ShieldLock,
     Flame,
     CircleDotted,
-    FileCode,
+    CreditCard,
     ArrowNarrowRight,
 } from 'tabler-icons-react';
 import axios from 'axios';
@@ -38,28 +40,26 @@ const useStyles = createStyles((theme) => ({
 
 const features = [
     {
-        icon: ReceiptOff,
-        title: 'Free and open source',
+        icon: ShieldLock,
+        title: 'Safe & Secure',
         description:
-            'All packages are published under MIT license, you can use Mantine in any project',
+            'All accounts and personal information on the website are private, secure and are not used by any third parties',
     },
     {
-        icon: FileCode,
-        title: 'TypeScript based',
+        icon: AdjustmentsAlt,
+        title: 'Customization & Filteration',
         description:
-            'Build type safe applications, all components and hooks export types',
+            'Fully customizable deals with the desired additional features you want alongside customizing your search towards what your heart desires',
     },
     {
-        icon: CircleDotted,
-        title: 'No annoying focus ring',
-        description:
-            'With new :focus-visible selector focus ring will appear only when user navigates with keyboard',
+        icon: CreditCard,
+        title: 'Easy Payment',
+        description: 'We provide an easy and secure payment',
     },
     {
         icon: Flame,
         title: 'Best Deals',
-        description:
-            'Customize colors, spacing, shadows, fonts and many other settings with global theme object',
+        description: 'the hottest and best deals on the market  ',
     },
 ];
 
@@ -118,7 +118,11 @@ export default function FeaturesTitle() {
                         egypt
                     </Title>
                     <Text color="dimmed">
-                        {`Choose among ${data.insurancesCount} insurances deals from ${data.categoriesCount} different Categories provided by over ${data.companiesCount} of the major insurance companies in egypt.`}
+                        We promise to offer portability, best performance,
+                        accuracy, usability, reliability, availability, and
+                        security all combined in one place.
+                        <br />
+                        {`You can choose among ${data.insurancesCount} insurance deals from ${data.categoriesCount} different Categories provided by over ${data.companiesCount} of the major insurance companies in egypt.`}
                     </Text>
 
                     <Button

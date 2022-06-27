@@ -12,8 +12,7 @@ import { useNavigate } from 'react-router-dom';
 const useStyles = createStyles((theme) => ({
     hero: {
         position: 'relative',
-        backgroundImage:
-            'url(https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80)',
+        backgroundImage: 'url(https://wallpaperaccess.com/full/749813.jpg)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
     },
@@ -55,6 +54,9 @@ const useStyles = createStyles((theme) => ({
         color: theme.white,
         maxWidth: 600,
 
+        [theme.fn.smallerThan('md')]: {
+            width: '60%',
+        },
         [theme.fn.smallerThan('sm')]: {
             maxWidth: '100%',
             fontSize: theme.fontSizes.sm,
@@ -74,19 +76,19 @@ export default function HeroContentLeft({ browseSection }) {
     const { classes } = useStyles();
     return (
         <div className={classes.hero}>
-            <Overlay
+            {/* <Overlay
                 gradient="linear-gradient(180deg, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, .65) 40%)"
                 opacity={1}
                 zIndex={0}
-            />
+            /> */}
             <Container className={classes.container}>
-                <Title className={classes.title}>
-                    A fully featured React components library
-                </Title>
+                <Title className={classes.title}>Equanitmity</Title>
                 <Text className={classes.description} size="xl" mt="xl">
-                    Build fully functional accessible web applications faster
-                    than ever – Mantine includes more than 120 customizable
-                    components and hooks to cover you in any situation
+                    {/* Equanimity offers various categories and types of insurance
+                    contracts to suit all of your needs and offer you the best
+                    of the best. */}
+                    No one can surely predict the future. But we can help you
+                    protect it. Leave the Insurance to Us.
                 </Text>
 
                 <Button

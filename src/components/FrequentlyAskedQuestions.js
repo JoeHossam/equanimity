@@ -64,20 +64,24 @@ export function FaqSimple() {
                     control: classes.control,
                 }}
             >
-                <Accordion.Item label="How can I reset my password?">
-                    {placeholder}
+                <Accordion.Item label="How can I register on the website?">
+                    {
+                        'We have both the login and registeration form in a single page accessible through the join button located on the top right of the navigation bar.'
+                    }
                 </Accordion.Item>
-                <Accordion.Item label="Can I create more that one account?">
-                    {placeholder}
+                <Accordion.Item label="How can I change my account name?">
+                    {`Once you're logged in, if you want to change your name displayed on the website you can access the profile settings page from the user menu located on the top right corner of the navigation bar. You can click on the image to open it`}
                 </Accordion.Item>
-                <Accordion.Item label="Do you store credit card information securely?">
-                    {placeholder}
+                <Accordion.Item label="What types of insurance can I get on Equanimity.com?">
+                    {`You can get all types of insurances on Equanimity.com the website's admins are constantly updating it with new categoreies and bringing new insurance companies to its market`}
                 </Accordion.Item>
-                <Accordion.Item label="What payment systems to you work with?">
-                    {placeholder}
+                <Accordion.Item label="How much does Equanimity take for commission?">
+                    {
+                        'Equanimity doesn’t take any commission from you for our services. We take referral fees from the insurance companies.'
+                    }
                 </Accordion.Item>
                 <Accordion.Item label="How can I subscribe to monthly newsletter?">
-                    {placeholder}
+                    {`Newsletter subscription can be located at the bottom of homepage`}
                 </Accordion.Item>
             </Accordion>
         </Container>

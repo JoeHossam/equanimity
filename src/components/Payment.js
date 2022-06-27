@@ -21,6 +21,7 @@ export default function Demo({
     const [manufacturer, setManufacturer] = useState(0);
     const [price, setPrice] = useState(0);
     const [year, setYear] = useState(0);
+    const [noStepsFix, setNoStepsFix] = useState(false);
 
     const navigate = useNavigate();
 
@@ -203,14 +204,36 @@ export default function Demo({
             </Group>
         );
     }
-
     if (steps.length === 0)
         return (
             <>
-                {children}
-                <Group align="right" position="center" mt="xl">
-                    <Button onClick={() => handlePayment()}>Pay</Button>
-                </Group>
+                {noStepsFix ? (
+                    <>
+                        Payment Completed, you can check it on your purchases
+                        tab in your profile
+                        <br />
+                        <Button
+                            size="xs"
+                            onClick={() => navigate('/profile/purchases')}
+                        >
+                            purchases
+                        </Button>
+                    </>
+                ) : (
+                    <>
+                        {children}
+                        <Group align="right" position="center" mt="xl">
+                            <Button
+                                onClick={() => {
+                                    handlePayment();
+                                    setNoStepsFix(true);
+                                }}
+                            >
+                                Pay
+                            </Button>
+                        </Group>
+                    </>
+                )}
             </>
         );
 

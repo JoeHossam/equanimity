@@ -114,6 +114,7 @@ const Reviews = ({ reviews, setReviews, insurances }) => {
     const [isDelete, setIsDelete] = useState(false);
 
     const openEdit = (review) => {
+        console.log('openEdit => ', review._id);
         setReviewId(review._id);
         setEditComment(review.comment);
         setEditRating(review.rating);
@@ -131,6 +132,7 @@ const Reviews = ({ reviews, setReviews, insurances }) => {
                 },
                 { withCredentials: 'true' }
             );
+            console.log('updateReview', reviewId);
             const { updatedReview } = res.data;
             setReviews(
                 reviews.map((item) => {
@@ -202,89 +204,86 @@ const Reviews = ({ reviews, setReviews, insurances }) => {
                         return <NotFoundInsurance />;
                     }
                     return (
-                        <>
-                            <li
-                                key={item._id}
-                                style={{
-                                    backgroundColor: 'white',
-                                    borderRadius: '0.25rem',
-                                    width: '100%',
-                                    marginBottom: '2rem',
+                        <li
+                            key={item._id}
+                            style={{
+                                backgroundColor: 'white',
+                                borderRadius: '0.25rem',
+                                width: '100%',
+                                marginBottom: '2rem',
+                            }}
+                        >
+                            <CardHeader
+                                sx={{
+                                    alignItems: 'flex-start',
                                 }}
-                            >
-                                <CardHeader
-                                    sx={{
-                                        alignItems: 'flex-start',
-                                    }}
-                                    title={
-                                        <>
-                                            <Typography
-                                                variant="h6"
-                                                sx={{
-                                                    display: 'flex',
-                                                    justifyContent:
-                                                        'space-between',
-                                                }}
+                                title={
+                                    <>
+                                        <Typography
+                                            variant="h6"
+                                            sx={{
+                                                display: 'flex',
+                                                justifyContent: 'space-between',
+                                            }}
+                                        >
+                                            <Link
+                                                to={`/insurance/${item.insuranceId}`}
                                             >
-                                                <Link
-                                                    to={`/insurance/${item.insuranceId}`}
-                                                >
-                                                    {
-                                                        insurances.find(
-                                                            (ins) =>
-                                                                ins._id ===
-                                                                item.insuranceId
-                                                        ).title
+                                                {
+                                                    insurances.find(
+                                                        (ins) =>
+                                                            ins._id ===
+                                                            item.insuranceId
+                                                    ).title
+                                                }
+                                            </Link>
+                                            <ButtonGroup>
+                                                <Button
+                                                    size="small"
+                                                    variant="contained"
+                                                    onClick={() =>
+                                                        openEdit(item)
                                                     }
-                                                </Link>
-                                                <ButtonGroup>
-                                                    <Button
-                                                        size="small"
-                                                        variant="contained"
-                                                        onClick={() =>
-                                                            openEdit(item)
-                                                        }
-                                                    >
-                                                        <EditIcon />
-                                                    </Button>
+                                                >
+                                                    <EditIcon />
+                                                </Button>
 
-                                                    <Button
-                                                        size="small"
-                                                        color="error"
-                                                        variant="contained"
-                                                        onClick={() =>
-                                                            openDelete(item._id)
-                                                        }
-                                                    >
-                                                        <ClearIcon />
-                                                    </Button>
-                                                </ButtonGroup>
-                                            </Typography>
+                                                <Button
+                                                    size="small"
+                                                    color="error"
+                                                    variant="contained"
+                                                    onClick={() =>
+                                                        openDelete(item._id)
+                                                    }
+                                                >
+                                                    <ClearIcon />
+                                                </Button>
+                                            </ButtonGroup>
+                                        </Typography>
 
-                                            <Rating
-                                                name="read-only"
-                                                value={item.rating}
-                                                precision={0.5}
-                                                readOnly
-                                            />
-                                            {item.comment && (
-                                                <>
-                                                    <Divider />
-                                                    <p
-                                                        style={{
-                                                            margin: '18px 0',
-                                                        }}
-                                                    >
-                                                        {item.comment}
-                                                    </p>
-                                                </>
-                                            )}
-                                        </>
-                                    }
-                                />
-                                <Divider />
-                            </li>
-                        </>
+                                        <Rating
+                                            name="read-only"
+                                            value={item.rating}
+                                            precision={0.5}
+                                            readOnly
+                                        />
+                                        {item.comment && (
+                                            <>
+                                                <Divider />
+                                                <p
+                                                    style={{
+                                                        margin: '18px 0',
+                                                    }}
+                                                >
+                                                    {item.comment}
+                                                </p>
+                                            </>
+                                        )}
+                                    </>
+                                }
+                            />
+                            <Divider />
+                        </li>
                     );
                 })}
             </ul>
