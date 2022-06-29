@@ -25,7 +25,7 @@ import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 
 const Filter = ({ urlCategory, search }) => {
     const { page, setQuery, companies, categories } = useSearchContext();
-    const [priceRange, setPriceRange] = useState([1000, 8000]);
+    const [priceRange, setPriceRange] = useState([500, 5000]);
     const [rating, setRating] = useState(1);
     const [selectedCompanies, setSelectedCompanies] = useState([]);
     const [selectedCategories, setSelectedCategories] = useState([]);
@@ -38,7 +38,7 @@ const Filter = ({ urlCategory, search }) => {
 
     const applyQuery = () => {
         let query = `title=${search}`;
-        const priceQuery = `basePrice>${priceRange[0]},basePrice<${priceRange[1]}`;
+        const priceQuery = `basePrice>=${priceRange[0]},basePrice<=${priceRange[1]}`;
         const ratingQuery = `rating>=${rating}`;
         const companiesQuery = `company=${selectedCompanies
             .map((item) => item._id)
@@ -123,8 +123,8 @@ const Filter = ({ urlCategory, search }) => {
                     <Typography>
                         <Slider
                             min={0}
-                            max={20000}
-                            step={500}
+                            max={5000}
+                            step={100}
                             getAriaLabel={() => 'Temperature range'}
                             value={priceRange}
                             onChange={(e) => setPriceRange(e.target.value)}
