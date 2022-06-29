@@ -14,7 +14,7 @@ import {
     AdjustmentsAlt,
     ShieldLock,
     Flame,
-    CircleDotted,
+    ShieldCheck,
     CreditCard,
     ArrowNarrowRight,
 } from 'tabler-icons-react';
@@ -41,7 +41,7 @@ const useStyles = createStyles((theme) => ({
 const features = [
     {
         icon: ShieldLock,
-        title: 'Safe & Secure',
+        title: 'Privacy',
         description:
             'All accounts and personal information on the website are private, secure and are not used by any third parties',
     },
@@ -53,13 +53,15 @@ const features = [
     },
     {
         icon: CreditCard,
-        title: 'Easy Payment',
-        description: 'We provide an easy and secure payment',
+        title: 'Safe Payment',
+        description:
+            'We offer our customers a safe paying process for the insurance contract they choose',
     },
     {
         icon: Flame,
         title: 'Best Deals',
-        description: 'the hottest and best deals on the market  ',
+        description:
+            'We advertise the best deals from the best insruance companies available in Egypt',
     },
 ];
 
