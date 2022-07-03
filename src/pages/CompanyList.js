@@ -51,7 +51,7 @@ const CompanyList = () => {
                     {data.map((item) => {
                         return (
                             <Card
-                                sx={{ minWidth: 345 }}
+                                sx={{ minWidth: 345, margin: '1rem' }}
                                 onClick={() => navigate(`/company/${item._id}`)}
                             >
                                 <CardActionArea>

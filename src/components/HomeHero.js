@@ -82,7 +82,7 @@ export default function HeroContentLeft({ browseSection }) {
                 zIndex={0}
             /> */}
             <Container className={classes.container}>
-                <Title className={classes.title}>Equanitmity</Title>
+                <Title className={classes.title}>Equanimity</Title>
                 <Text className={classes.description} size="xl" mt="xl">
                     {/* Equanimity offers various categories and types of insurance
                     contracts to suit all of your needs and offer you the best

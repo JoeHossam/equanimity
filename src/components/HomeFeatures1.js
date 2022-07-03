@@ -14,7 +14,7 @@ import {
     AdjustmentsAlt,
     ShieldLock,
     Flame,
-    CircleDotted,
+    ShieldCheck,
     CreditCard,
     ArrowNarrowRight,
 } from 'tabler-icons-react';
@@ -41,7 +41,7 @@ const useStyles = createStyles((theme) => ({
 const features = [
     {
         icon: ShieldLock,
-        title: 'Safe & Secure',
+        title: 'Privacy',
         description:
             'All accounts and personal information on the website are private, secure and are not used by any third parties',
     },
@@ -53,13 +53,15 @@ const features = [
     },
     {
         icon: CreditCard,
-        title: 'Easy Payment',
-        description: 'We provide an easy and secure payment',
+        title: 'Safe Payment',
+        description:
+            'We offer our customers a safe paying process for the insurance contract they choose',
     },
     {
         icon: Flame,
         title: 'Best Deals',
-        description: 'the hottest and best deals on the market  ',
+        description:
+            'We advertise the best deals from the best insruance companies available in Egypt',
     },
 ];
 
@@ -122,7 +124,15 @@ export default function FeaturesTitle() {
                         accuracy, usability, reliability, availability, and
                         security all combined in one place.
                         <br />
-                        {`You can choose among ${data.insurancesCount} insurance deals from ${data.categoriesCount} different Categories provided by over ${data.companiesCount} of the major insurance companies in egypt.`}
+                        <div style={{ wordWrap: 'pre-wrap' }}>
+                            {`You can choose among`}{' '}
+                            <b> {`${data.insurancesCount} `}</b>
+                            {` insurance deals from`}{' '}
+                            <b> {`${data.categoriesCount} `}</b>
+                            {` different Categories provided by over`}{' '}
+                            <b> {`${data.companiesCount}`} </b>{' '}
+                            {`of the major insurance companies in egypt.`}
+                        </div>
                     </Text>
 
                     <Button

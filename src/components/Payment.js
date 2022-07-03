@@ -104,48 +104,6 @@ export default function Demo({
         case 'Motor Insurance':
             steps = [
                 {
-                    label: 'Car Manufacturer ',
-                    component: (
-                        <Group
-                            sx={{
-                                maxWidth: '500px',
-                                margin: 'auto',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                padding: '2rem',
-                            }}
-                        >
-                            <Text size="lg">What is your car brand</Text>
-                            <Input
-                                value={manufacturer}
-                                onChange={(e) =>
-                                    setManufacturer(e.target.value)
-                                }
-                            />
-                        </Group>
-                    ),
-                },
-                {
-                    label: 'Car Model',
-                    component: (
-                        <Group
-                            sx={{
-                                maxWidth: '500px',
-                                margin: 'auto',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                padding: '2rem',
-                            }}
-                        >
-                            <Text size="lg">What is your car model</Text>
-                            <Input
-                                value={model}
-                                onChange={(e) => setModel(e.target.value)}
-                            />
-                        </Group>
-                    ),
-                },
-                {
                     label: 'Manufacturing year',
                     component: (
                         <Group
