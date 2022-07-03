@@ -9,7 +9,7 @@ import {
     SimpleGrid,
 } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
-const image = 'https://ui.mantine.dev/_next/static/media/image.11cd6c19.svg';
+const image = '404 Error-pana.svg';
 
 const useStyles = createStyles((theme) => ({
     root: {
