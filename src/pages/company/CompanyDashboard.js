@@ -469,7 +469,7 @@ const Create = ({ setModal, setRe }) => {
                                         'link',
                                         'clean',
                                     ],
-                                    ['unorderedList', 'h1', 'h2', 'h3'],
+                                    ['orderedList', 'h1', 'h2', 'h3'],
                                     ['sup', 'sub'],
                                     ['alignLeft', 'alignCenter', 'alignRight'],
                                 ]}
@@ -694,7 +694,7 @@ const Edit = ({ setModal, selectedIns, setRe }) => {
                                         'link',
                                         'clean',
                                     ],
-                                    ['unorderedList', 'h1', 'h2', 'h3'],
+                                    ['orderedList', 'h1', 'h2', 'h3'],
                                     ['sup', 'sub'],
                                     ['alignLeft', 'alignCenter', 'alignRight'],
                                 ]}
