@@ -64,19 +64,19 @@ const NavLayout = () => {
             <Footer
                 links={[
                     {
-                        link: '#',
+                        link: 'https://www.whatsapp.com',
                         label: <BrandWhatsapp />,
                     },
                     {
-                        link: '#',
+                        link: 'https://www.twitter.com',
                         label: <BrandTwitter />,
                     },
                     {
-                        link: '#',
+                        link: 'https://www.instagram.com',
                         label: <BrandInstagram />,
                     },
                     {
-                        link: '#',
+                        link: 'https://www.facebook.com',
                         label: <BrandFacebook />,
                     },
                 ]}

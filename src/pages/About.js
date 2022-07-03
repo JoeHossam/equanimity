@@ -39,7 +39,7 @@ const About = () => {
             avatar: 'https://cdn.discordapp.com/attachments/872155174884478977/990706145779933256/icon1.png',
             job: 'A senior leader',
             name: 'Mohamed Hosny',
-            email: 'mohamedhorny@equanimity.com',
+            email: 'mohamedhosny@equanimity.com',
             phone: '+201000000000',
         },
         {
