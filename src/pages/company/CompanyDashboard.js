@@ -166,10 +166,9 @@ const CompanyDashboard = () => {
                                         ...modal,
                                         open: true,
                                         type: 'edit',
-                                        size: 'md',
+                                        size: 'full',
                                     });
                                     setSelectedIns(ins);
-                                    console.log(ins);
                                 }}
                             >
                                 <EditIcon />
@@ -394,85 +393,110 @@ const Create = ({ setModal, setRe }) => {
                 <DialogContentText component={'div'}>
                     <form
                         onSubmit={handleSubmit}
-                        style={{ textAlign: 'start' }}
+                        style={{
+                            textAlign: 'start',
+                            display: 'flex',
+                            flexDirection: 'row',
+                            minHeight: '70vh',
+                            padding: 0,
+                            alignItems: 'flex-start',
+                        }}
                     >
-                        <div
-                            style={{
-                                display: 'grid',
-                                gridTemplateColumns: 'auto auto',
-                                width: '100%',
-                                marginBottom: '1rem',
-                            }}
-                        >
-                            <TextField
-                                fullWidth
-                                label="Title"
-                                onChange={(e) =>
-                                    setInsurance({
-                                        ...insurance,
-                                        title: e.target.value,
-                                    })
-                                }
-                            />
-                            <Select
-                                fullWidth
-                                value={insurance.category}
-                                onChange={(e) =>
-                                    setInsurance({
-                                        ...insurance,
-                                        category: e.target.value,
-                                    })
-                                }
+                        <div style={{ margin: '0 2rem', width: '100%' }}>
+                            <div
+                                style={{
+                                    display: 'grid',
+                                    gridTemplateColumns: 'auto auto',
+                                    width: '100%',
+                                    marginBottom: '1rem',
+                                }}
                             >
-                                {categories.map((item) => {
-                                    return (
-                                        <MenuItem
-                                            key={item._id}
-                                            value={item.name}
-                                        >
-                                            {item.name}
-                                        </MenuItem>
-                                    );
-                                })}
-                            </Select>
-                        </div>
-                        <TextField
-                            fullWidth
-                            label="Base Price"
-                            type="number"
-                            sx={{ marginBottom: '1rem' }}
-                            onChange={(e) =>
-                                setInsurance({
-                                    ...insurance,
-                                    basePrice: e.target.value,
-                                })
-                            }
-                        />
-                        <RichTextEditor
-                            sx={{ width: '100%' }}
-                            value={description}
-                            onChange={setDescription}
-                        />
-                        <FormControlLabel
-                            control={
-                                <Checkbox
-                                    checked={insurance.hidden}
-                                    onChange={() =>
-                                        setInsurance((prev) => {
-                                            return {
-                                                ...prev,
-                                                hidden: !prev.hidden,
-                                            };
+                                <TextField
+                                    // fullWidth
+                                    sx={{ marginRight: '1rem' }}
+                                    label="Title"
+                                    onChange={(e) =>
+                                        setInsurance({
+                                            ...insurance,
+                                            title: e.target.value,
                                         })
                                     }
                                 />
-                            }
-                            label="Hide Insurance"
-                        />
-                        <FeatureList
-                            list={featureList}
-                            setList={setFeatureList}
-                        />
+                                <Select
+                                    // fullWidth
+                                    value={insurance.category}
+                                    onChange={(e) =>
+                                        setInsurance({
+                                            ...insurance,
+                                            category: e.target.value,
+                                        })
+                                    }
+                                >
+                                    {categories.map((item) => {
+                                        return (
+                                            <MenuItem
+                                                key={item._id}
+                                                value={item.name}
+                                            >
+                                                {item.name}
+                                            </MenuItem>
+                                        );
+                                    })}
+                                </Select>
+                            </div>
+                            <TextField
+                                fullWidth
+                                label="Base Price"
+                                type="number"
+                                sx={{ marginBottom: '1rem' }}
+                                onChange={(e) =>
+                                    setInsurance({
+                                        ...insurance,
+                                        basePrice: e.target.value,
+                                    })
+                                }
+                            />
+                            <RichTextEditor
+                                sx={{ width: '100%' }}
+                                value={description}
+                                onChange={setDescription}
+                                controls={[
+                                    [
+                                        'bold',
+                                        'italic',
+                                        'underline',
+                                        'strike',
+                                        'link',
+                                        'clean',
+                                    ],
+                                    ['orderedList', 'h1', 'h2', 'h3'],
+                                    ['sup', 'sub'],
+                                    ['alignLeft', 'alignCenter', 'alignRight'],
+                                ]}
+                            />
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        checked={insurance.hidden}
+                                        onChange={() =>
+                                            setInsurance((prev) => {
+                                                return {
+                                                    ...prev,
+                                                    hidden: !prev.hidden,
+                                                };
+                                            })
+                                        }
+                                    />
+                                }
+                                label="Hide Insurance"
+                            />
+                        </div>
+                        <div style={{ margin: '0 2rem', width: '100%' }}>
+                            <FeatureList
+                                list={featureList}
+                                setList={setFeatureList}
+                            />
+                        </div>
                     </form>
                 </DialogContentText>
             </DialogContent>
@@ -590,86 +614,114 @@ const Edit = ({ setModal, selectedIns, setRe }) => {
             <DialogTitle>{'Update Insurance'}</DialogTitle>
             <DialogContent dividers>
                 <DialogContentText component={'div'}>
-                    <form onSubmit={handleSubmit}>
-                        <div
-                            style={{
-                                display: 'grid',
-                                gridTemplateColumns: 'auto auto',
-                                width: '100%',
-                                marginBottom: '1rem',
-                            }}
-                        >
-                            <TextField
-                                fullWidth
-                                label="Title"
-                                value={insurance.title}
-                                onChange={(e) =>
-                                    setInsurance({
-                                        ...insurance,
-                                        title: e.target.value,
-                                    })
-                                }
-                            />
-                            <Select
-                                fullWidth
-                                value={insurance.category}
-                                onChange={(e) =>
-                                    setInsurance({
-                                        ...insurance,
-                                        category: e.target.value,
-                                    })
-                                }
+                    <form
+                        style={{
+                            textAlign: 'start',
+                            display: 'flex',
+                            flexDirection: 'row',
+                            minHeight: '70vh',
+                            padding: 0,
+                            alignItems: 'flex-start',
+                        }}
+                        onSubmit={handleSubmit}
+                    >
+                        <div style={{ margin: '0 2rem', width: '100%' }}>
+                            <div
+                                style={{
+                                    display: 'grid',
+                                    gridTemplateColumns: 'auto auto',
+                                    width: '100%',
+                                    marginBottom: '1rem',
+                                }}
                             >
-                                {categories.map((item, index) => {
-                                    return (
-                                        <MenuItem
-                                            key={item._id}
-                                            value={item.name}
-                                        >
-                                            {item.name}
-                                        </MenuItem>
-                                    );
-                                })}
-                            </Select>
-                        </div>
-                        <TextField
-                            fullWidth
-                            label="Base Price"
-                            type="number"
-                            value={insurance.basePrice}
-                            sx={{ marginBottom: '1rem' }}
-                            onChange={(e) =>
-                                setInsurance({
-                                    ...insurance,
-                                    basePrice: e.target.value,
-                                })
-                            }
-                        />
-                        <RichTextEditor
-                            sx={{ width: '100%' }}
-                            value={description}
-                            onChange={setDescription}
-                        />
-                        <FormControlLabel
-                            control={
-                                <Checkbox
-                                    checked={insurance.hidden}
-                                    onChange={() =>
-                                        setInsurance((prev) => {
-                                            return {
-                                                ...prev,
-                                                hidden: !prev.hidden,
-                                            };
+                                <TextField
+                                    // fullWidth
+                                    sx={{ marginRight: '1rem' }}
+                                    label="Title"
+                                    value={insurance.title}
+                                    onChange={(e) =>
+                                        setInsurance({
+                                            ...insurance,
+                                            title: e.target.value,
                                         })
                                     }
                                 />
-                            }
-                            label="Hide Insurance"
-                        />
-                        <FeatureList
-                            list={featureList}
-                            setList={setFeatureList}
-                        />
+                                <Select
+                                    // fullWidth
+                                    value={insurance.category}
+                                    onChange={(e) =>
+                                        setInsurance({
+                                            ...insurance,
+                                            category: e.target.value,
+                                        })
+                                    }
+                                >
+                                    {categories.map((item, index) => {
+                                        return (
+                                            <MenuItem
+                                                key={item._id}
+                                                value={item.name}
+                                            >
+                                                {item.name}
+                                            </MenuItem>
+                                        );
+                                    })}
+                                </Select>
+                            </div>
+                            <TextField
+                                fullWidth
+                                label="Base Price"
+                                type="number"
+                                value={insurance.basePrice}
+                                sx={{ marginBottom: '1rem' }}
+                                onChange={(e) =>
+                                    setInsurance({
+                                        ...insurance,
+                                        basePrice: e.target.value,
+                                    })
+                                }
+                            />
+                            <RichTextEditor
+                                sx={{ width: '100%' }}
+                                value={description}
+                                onChange={setDescription}
+                                controls={[
+                                    [
+                                        'bold',
+                                        'italic',
+                                        'underline',
+                                        'strike',
+                                        'link',
+                                        'clean',
+                                    ],
+                                    ['orderedList', 'h1', 'h2', 'h3'],
+                                    ['sup', 'sub'],
+                                    ['alignLeft', 'alignCenter', 'alignRight'],
+                                ]}
+                            />
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        checked={insurance.hidden}
+                                        onChange={() =>
+                                            setInsurance((prev) => {
+                                                return {
+                                                    ...prev,
+                                                    hidden: !prev.hidden,
+                                                };
+                                            })
+                                        }
+                                    />
+                                }
+                                label="Hide Insurance"
+                            />
+                        </div>
+                        <div style={{ margin: '0 2rem', width: '100%' }}>
+                            <FeatureList
+                                list={featureList}
+                                setList={setFeatureList}
+                            />
+                        </div>
                     </form>
                 </DialogContentText>
             </DialogContent>

@@ -617,15 +617,17 @@ const ViewInsurance = ({ setModal, selectedIns, setRe }) => {
                             value={selectedIns.basePrice}
                             sx={{ marginBottom: '1rem' }}
                         />
-
-                        <TextField
-                            fullWidth
-                            label="Description"
-                            value={selectedIns.description}
-                            sx={{ marginBottom: '1rem' }}
-                            multiline
-                            minRows={3}
-                        />
+                        Description
+                        <Typography
+                            sx={{ border: '1px solid #ccc', width: '100%' }}
+                            dangerouslySetInnerHTML={{
+                                __html: selectedIns.description,
+                            }}
+                            style={{
+                                marginBottom: '1rem',
+                                padding: 0,
+                            }}
+                        ></Typography>
                         <TableContainer component={Paper}>
                             <Table
                                 sx={{ minWidth: 650, border: '2px solid #eee' }}
@@ -788,15 +790,17 @@ const ViewAll = ({ setModal, selectedIns, setRe }) => {
                             value={selectedIns.basePrice}
                             sx={{ marginBottom: '1rem' }}
                         />
-
-                        <TextField
-                            fullWidth
-                            label="Description"
-                            value={selectedIns.description}
-                            sx={{ marginBottom: '1rem' }}
-                            multiline
-                            minRows={3}
-                        />
+                        Description
+                        <Typography
+                            sx={{ border: '1px solid #ccc', width: '100%' }}
+                            dangerouslySetInnerHTML={{
+                                __html: selectedIns.description,
+                            }}
+                            style={{
+                                marginBottom: '1rem',
+                                padding: 0,
+                            }}
+                        ></Typography>
                         <TableContainer component={Paper}>
                             <Table
                                 sx={{ minWidth: 650, border: '2px solid #eee' }}

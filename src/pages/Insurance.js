@@ -488,9 +488,10 @@ const Insurance = () => {
                         }}
                     >
                         <InfoOutlinedIcon sx={{ marginX: '1rem' }} />
-                        Note that this price is just a base price and the actual
-                        insurance cost depends on many other variations. Proceed
-                        to payment for a more accurate price.
+                        Note that this price is due to change based on the
+                        information you might insert before showing the final
+                        receipt, and also on any additional services you might
+                        choose.
                     </Typography>
                     <Divider />
                     <Reviews

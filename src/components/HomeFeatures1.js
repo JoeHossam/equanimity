@@ -124,7 +124,15 @@ export default function FeaturesTitle() {
                         accuracy, usability, reliability, availability, and
                         security all combined in one place.
                         <br />
-                        {`You can choose among ${data.insurancesCount} insurance deals from ${data.categoriesCount} different Categories provided by over ${data.companiesCount} of the major insurance companies in egypt.`}
+                        <div style={{ wordWrap: 'pre-wrap' }}>
+                            {`You can choose among`}{' '}
+                            <b> {`${data.insurancesCount} `}</b>
+                            {` insurance deals from`}{' '}
+                            <b> {`${data.categoriesCount} `}</b>
+                            {` different Categories provided by over`}{' '}
+                            <b> {`${data.companiesCount}`} </b>{' '}
+                            {`of the major insurance companies in egypt.`}
+                        </div>
                     </Text>
 
                     <Button
